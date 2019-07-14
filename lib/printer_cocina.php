@@ -1,9 +1,9 @@
 <?php
 require 'printer/autoload.php';        
+// use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-// use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 
 // Conexión por Impresora compartida
 $nombre_impresora = "XP80CCaja";
@@ -35,46 +35,36 @@ try {
     $printer->text("\n\n");
     // cabecera
     $printer->text("Intimus la terraza" . "\n");
-    $printer->text("Restaurante Bar y Parrilla" . "\n");
     $printer->text(date("d-m-Y H:i:s") . "\n\n");
     
     // Información de cuenta
     $printer->setJustification(Printer::JUSTIFY_LEFT);
-
-    $printer->text("Orden No: " . $c['nombre'] . '. Cliente: General' . "\n");
+    
+    $printer->text("Orden No: " . $c['nombre'] . '.          Mesa: ' . $c['mesa'] . "\n");
+    $printer->text('' . "\n\n");
+    $printer->text('Cant. Producto                      ' . "\n");
     $printer->text('------------------------------------------------' . "\n");
-    $printer->text('Cant Concepto                     $        Total' . "\n");
-    $printer->text('------------------------------------------------' . "\n");
-
+    
     foreach($c['productos'] as $p ){
-        $text = 
-            fill($p['cantidad'], 4) . 
-            fill($p['nombre'], 27) . 
-            '$' . fill($p['precio'], 7, ' ', false) .
-            ' $' . fill($p['total'], 7, ' ', false);
-        $printer->text($text . "\n");
-    }
-    $printer->text(fill('', 31) .'-----------------' . "\n");
-    if ($c['descuento']  > 0 ){
-        $printer->text(fill('', 22) . '  Descuento:   $' .  fill($c['descuento'], 10, ' ', false) . "\n");
-    }
-    if ($c['con_iva']){
-        $printer->text(fill('', 22) . '   Subtotal:   $' .  fill($c['subtotal'], 10, ' ', false) . "\n");
-        $printer->text(fill('', 22) . '        IVA:   $' .  fill($c['iva'], 10, ' ', false) . "\n");
-    }
-    $printer->text(fill('', 22) . '      TOTAL:   $' .  fill($c['total'], 10, ' ', false) . "\n");
-    // Termina cuenta
+        if (isset($p['en_preparacion']) && $p['en_preparacion'] == 1) continue 1;
 
-    $m = array('meses', 'ene','feb','mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic');
+        $text = fill($p['cantidad'], 6) . 
+        fill($p['nombre'], 40);
+        $printer->text($text . "\n");
+        if (!empty($p['comentarios'])){
+            $printer->text($p['comentarios'] . "\n");
+        }
+        $printer->text('----------' . "\n");
+    }
+    // Termina orden
+
     // footer
+    $printer->text('------------------------------------------------' . "\n");
     $printer->setJustification(Printer::JUSTIFY_CENTER);
     $printer->text("\n");
-    $printer->text("Es un placer Atenderlo\n");
-    $printer->text("Este ticket no es un comprobante fiscal\n");
-    $printer->text("En caso de requerir factura, favor de\n");
-    $fecha = date('t') . '-' . $m[date('n')] . '-' . date('Y');
-    $printer->text("solicitarla al mesero antes del " . $fecha  . "\n" );
-    $printer->text("\n\n\n");
+    $printer->text("FIN DE LA COMANDA\n");
+    $printer->text("\n\n");
+    
     /*
         Cortamos el papel. Si nuestra impresora
         no tiene soporte para ello, no generará

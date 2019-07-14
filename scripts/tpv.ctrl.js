@@ -86,6 +86,7 @@ angular.module('app', []).controller('tpv', function ($scope, $http) {
         
     }
     $scope.openProduct = (p) => {
+        if (p.en_preparacion == 10) return; // do nothing
         $scope.producto = p
         $('#modal-producto').modal('show')
 
@@ -107,7 +108,7 @@ angular.module('app', []).controller('tpv', function ($scope, $http) {
     }
     $scope.addProducto = (producto) => {
         // primero buscamos el producto en la comanda.
-        var prod_in_list = $scope.comanda.productos.findIndex(p => p.id_producto == producto.id_producto)
+        var prod_in_list = $scope.comanda.productos.findIndex(p => p.id_producto == producto.id_producto && p.en_preparacion != 1)
         if (prod_in_list < 0) {
             prod_in_list = $scope.comanda.productos.length
             producto.cantidad = 1
@@ -154,20 +155,20 @@ angular.module('app', []).controller('tpv', function ($scope, $http) {
         $scope.comanda.descuento = descuento
 
         total = subtotal - descuento
-        if ($('#con_iva').iCheck('update')[0].checked) {
-            $('#iva').removeAttr('disabled').removeClass('disabled');
-            // Fórmula agregando IVA
-            // iva = total * (tasa_iva / 100)
-            // total += iva
+        // if ($('#con_iva').iCheck('update')[0].checked) {
+        //     $('#iva').removeAttr('disabled').removeClass('disabled');
+        //     // Fórmula agregando IVA
+        //     // iva = total * (tasa_iva / 100)
+        //     // total += iva
 
-            // Desglosando IVA
-            subtotal = total / (1 + (tasa_iva / 100))
-            iva = parseFloat(total - subtotal)
-        } else {
-            iva = 0
-            total += parseFloat(iva)
-            $('#iva').attr('readonly', 'readonly').addClass('disabled');
-        }
+        //     // Desglosando IVA
+        //     subtotal = total / (1 + (tasa_iva / 100))
+        //     iva = parseFloat(total - subtotal)
+        // } else {
+        //     iva = 0
+        //     total += parseFloat(iva)
+        //     $('#iva').attr('readonly', 'readonly').addClass('disabled');
+        // }
 
         $scope.comanda.subtotal = parseFloat(subtotal).toFixed(2)
         $scope.comanda.iva = parseFloat(iva).toFixed(2)
@@ -182,7 +183,7 @@ angular.module('app', []).controller('tpv', function ($scope, $http) {
         //$scope.comanda.descuento_str = descuento_str
         $scope.comanda.subtotal_real = parseFloat(subtotal_real).toFixed(2)
         // $scope.comanda.subtotal = parseFloat(subtotal.toFixed(2))
-        $scope.comanda.con_iva = $('#con_iva').iCheck('update')[0].checked
+        // $scope.comanda.con_iva = $('#con_iva').iCheck('update')[0].checked
         $scope.comanda.tasa_iva = parseFloat(tasa_iva.toFixed(2))
         // $scope.comanda.iva = parseFloat(iva.toFixed(2))
         $scope.comanda.tasa_servicio = parseFloat(tasa_servicio.toFixed(2))
@@ -321,7 +322,54 @@ angular.module('app', []).controller('tpv', function ($scope, $http) {
             }
         })
     }
+
+    $scope.generarCuenta = () => {
+        $.ajax({
+            method: 'POST',
+            url: '/ajax/tpv/cerrar-comanda',
+            data: angular.toJson($scope.comanda),
+            dataType: 'json',
+            async: false,
+            success: function (response) {
+                Swal.fire({
+                    // position: 'top-end',
+                    type: 'success',
+                    title: 'La Comanda ha sido cerrada!',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                if (parseInt(response.id_registro) > 0) {
+                    var existe = $scope.comandas.findIndex(c => c.id_registro == response.id_registro)
+                    if (existe >= 0) {
+                        $scope.comandas.splice(existe, 1)
+                    }
+                }
+
+                $scope.nuevaComanda()
+            },
+            error: function (response) {
+                Swal.fire({
+                    // position: 'top-end',
+                    type: 'error',
+                    title: 'Ocurrió un error al registrar la comanda!'
+                })
+            }
+        })
+    }
     $scope.colocarOrden = () => {
+        $scope.comanda.id_mesa = $('#mesa-comanda').find('option:selected').val()
+
+        if ($scope.comanda.id_mesa < 0) {
+            Swal.fire({
+                // position: 'top-end',
+                type: 'error',
+                title: 'Por favor selecciona una mesa'
+            })
+            return;
+        }
+
+        $scope.comanda.mesa = $('#mesa-comanda').find('option:selected').text()
+
         $.ajax({
             method: 'POST',
             url: '/ajax/tpv/comanda',
@@ -337,15 +385,16 @@ angular.module('app', []).controller('tpv', function ($scope, $http) {
                     timer: 1500
                 })
                 if (parseInt(response.id_registro) > 0) {
-                    $scope.comanda.id_registro = parseInt(response.id_registro)
-                    $scope.comanda.nombre = 'C-' + response.id_registro
-                    $scope.comanda.comanda = 'C-' + response.id_registro
-                    
-                    $scope.comandas.unshift($scope.comanda)
+                    var existe = $scope.comandas.find(c => c.id_registro == response.id_registro)
+                    if (!existe) {
+                        $scope.comanda.id_registro = parseInt(response.id_registro)
+                        $scope.comanda.nombre = 'C-' + response.id_registro
+                        $scope.comanda.comanda = 'C-' + response.id_registro
+                        $scope.comandas.unshift($scope.comanda)
+                    }
                 }
                 
-                $scope.nuevaComanda()
-                
+                $scope.nuevaComanda()   
                 // comandas.unshift({
                 //     nombre: 'C-0',
                 //     comanda: 'C-0',
@@ -353,8 +402,6 @@ angular.module('app', []).controller('tpv', function ($scope, $http) {
                 //     productos: [],
                 //     activa: true
                 // })
-
-                
             },
             error: function (response) {
                 Swal.fire({

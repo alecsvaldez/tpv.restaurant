@@ -39,19 +39,22 @@ include_once 'config.php';
                             </tr>
                             </thead>
                             <tbody id="lpc">
-                                <tr ng-repeat="p in comanda.productos" ng-click="openProduct(p)">
-                                    <td>{{ p.nombre }} <i class="fa fa-comment text-primary" ng-if="p.comentarios.length > 0"></i> </td>
+                                <tr ng-repeat="p in comanda.productos" ng-click="openProduct(p)" ng-class="{'text-warning': p.en_preparacion}">
+                                    <td>{{ p.nombre }} 
+                                        <i class="fa fa-comment text-primary" ng-if="p.comentarios.length > 0"></i> 
+                                        <i class="fa fa-fire text-danger" ng-if="p.en_preparacion == 1"></i> 
+                                    </td>
                                     <td><input type="text" readonly class="input-precio numeric" ng-model="p.precio"/></td>
-                                    <td><input type="text" class="input-precio numeric-filter" min="1" ng-model="p.cantidad"onfocus="this.select()" ng-keyup="calculateRow(p)" /></td>
+                                    <td><input type="text" class="input-precio numeric-filter" min="1" ng-readonly="p.en_preparacion == 1" ng-model="p.cantidad" onfocus="this.select()" ng-keyup="calculateRow(p)" /></td>
                                     <td ng-if="enable_product_discount"><input type="text" disabled class="input-precio numeric-filter discount" maxlength="6" ng-model="p.descuento" /></td>                
                                     <td><input type="text" tabindex="-1" class="input-precio input-total" readonly ng-model="p.total"></td>
-                                    <td style="text-align: center"><a tabindex="-1" class="btn btn-danger btn-xs" ng-click="deleter(p, $index);"><i style="color:white" class="fa fa-trash"></i></a></td>
+                                    <td style="text-align: center"><a tabindex="-1" ng-if="p.en_preparacion != 1" class="btn btn-danger btn-xs" ng-click="deleter(p, $index);$event.stopPropagation()"><i style="color:white" class="fa fa-trash"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="calculation-area">
-                        <p>
+                        <!-- <p>
                             <span class="fl-width">Productos: </span>
                             <span class="sl-width" >{{comanda.count_items}}</span>
                             <span class="tl-width">Subtotal:</span>
@@ -78,7 +81,7 @@ include_once 'config.php';
                             <span class="fil-width">
                                 <input type="text" tabindex="-1" class="disabled" value="0.00" readonly name="iva" id="iva" ng-model="comanda.iva">
                             </span>
-                        </p>
+                        </p> -->
                         <hr class="border-top-pay">
                         <p>
                             <span class="fl-width"></span>
@@ -95,8 +98,8 @@ include_once 'config.php';
                     <div class="btn-area " style="margin-bottom: 9px">
                         <div class="btn-group-custom">
                             <button type="button" class="btn btn-danger" id="btn-cancel" ng-disabled="comanda.productos.length == 0" ng-click="cancelarComanda(comanda)" style="width: 24%">Cancelar</button>
-                            <button type="button" class="btn btn-warning" id="btn-hold" ng-disabled="comanda.productos.length == 0" style="width: 24%">En Espera</button>
-                            <button type="button" class="btn btn-green" id="btn-ticket" ng-disabled="comanda.productos.length == 0" style="width: 20%">Recibo</button>
+                            <!-- <button type="button" class="btn btn-warning" id="btn-hold" ng-disabled="comanda.productos.length == 0" style="width: 24%">En Espera</button> -->
+                            <button type="button" class="btn btn-green" id="btn-ticket" ng-disabled="comanda.productos.length == 0" style="width: 20%"  ng-click="generarCuenta()">Cuenta</button>
                             <button type="button" class="btn btn-success" id="btn-place-order" ng-disabled="comanda.productos.length == 0" ng-click="colocarOrden()" style="width: 29%">Colocar Orden</button>
                         </div>
                     </div>
@@ -120,13 +123,13 @@ include_once 'config.php';
                             </select>
                         </div>
                         <div class="col-sm-8">
-                            <select class="form-control select2">
+                            <select class="form-control select2" id="mesa-comanda">
                                 <option value="-1">Selecciona la mesa</option>
                                 <option value="0">Venta de mostrador</option>
                             <?php
                             foreach($mesas as $m){
                                 ?>
-                                <option value=""><?php echo $m['nombre']?></option>
+                                <option value="<?php echo $m['id']?>"><?php echo $m['nombre']?></option>
                                 <?php
                             }
                             ?>
@@ -265,7 +268,7 @@ include_once 'config.php';
     .table-scroll {
         margin: 0 0 5px;
         overflow: auto;
-        height: calc(100% - 200px)
+        height: calc(100% - 90px)
     }
     .sale_cart td { padding: 6px 4px; font-size:12px;  }
     .sale_cart .input-precio { width: 100%; padding: 1px 6px; text-align: right}

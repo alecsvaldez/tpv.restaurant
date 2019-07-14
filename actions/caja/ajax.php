@@ -14,11 +14,13 @@ switch($accion){
     case 'comandas':
         // Traemos las comandas existentes
         $comandas_db = $db->get("SELECT 
-            id AS id_registro
-            , CONCAT(Comanda, '-', id) AS nombre
-            , CONCAT('C-', id) AS comanda
+            c.id AS id_registro
+            , CONCAT('C-', c.IdMesa, '-', c.id) AS nombre
+            , CONCAT('C-', c.IdMesa, '-', c.id) AS comanda
+            , m.id AS id_mesa
+            , CONCAT( IFNULL(m.Mesa, 'Mesa') , ' ',  m.id) AS mesa 
             , IdAtiende AS id_usuario
-            , FechaCrea AS generada
+            , c.FechaCrea AS generada
             , c.OrdenCerrada AS orden_cerrada
             , c.IdTicket AS id_ticket
             , c.ConServicio AS con_servicio
@@ -34,10 +36,12 @@ switch($accion){
             , c.Pagado AS pagado
             , c.OrdenPagada AS orden_pagada
         FROM tb_comandas c
-        WHERE Estatus = 1
-            -- AND OrdenCerrada = 0
+            LEFT JOIN tb_mesas m ON m.id = c.IdMesa
+        WHERE c.Estatus = 1
+            AND OrdenCerrada = 1
+            -- AND OrdenPagada = 0
             -- AND IdTicket = 0
-        ORDER BY id");
+        ORDER BY c.id");
 
         $comandas = array();
         foreach($comandas_db as &$c){
@@ -65,11 +69,25 @@ switch($accion){
         exit;
     break;
     case 'cobrar_comanda':
-        $c = $data;
-        echo '<pre>';print_r($c);echo'</pre>';
-        // update a la comanda para marcarla como cobrada/cerrada
-        require ROOTPATH . 'lib/printer/printer.php'; 
-        
+        $id_registro = isset($data['id_registro'] ) ? $data['id_registro']  : 0;
+        $comanda = array(
+            'OrdenPagada' => 1,
+            'IdUsuarioModifica' => $_SESSION['id'],
+            'FechaModifica' => date('Y-m-d H:i:s')
+        );
+        $id_comanda = $db->updateById('tb_comandas', $comanda, 'id', $id_registro);
+        if ($id_comanda !== false){
+            $response = array ('id_registro' => $id_comanda, 'message' => 'La comanda ha sido cerrada');
+            $c = $data;
+            // echo '<pre>';print_r($c);echo'</pre>';
+            // update a la comanda para marcarla como cobrada/cerrada
+            require ROOTPATH . 'lib/printer.php'; 
+        } else {
+            $error = $db->executeError();
+            $response = array ('id_registro' => 0, 'message' => 'Error al cerrar: ' . $error['db_message']);
+        }
+        echo json_encode($response);
+        exit;
     break;
     default: echo 'No valido: ' . $accion; print_array($data); exit;
 }    

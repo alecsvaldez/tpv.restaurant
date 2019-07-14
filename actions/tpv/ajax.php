@@ -33,7 +33,8 @@ switch($accion){
             $id = $_GET['id'];
             $comanda = $db->first("SELECT
                 c.id AS id_registro
-                , CONCAT(Comanda, '-', c.id) AS nombre
+                --, CONCAT(c.Comanda, '-', c.id) AS nombre
+                , CONCAT('C-', c.id) AS nombre
                 , CONCAT('C-', c.id) AS comanda
                 , c.Comanda AS nombre
                 , c.IdMesa AS id_mesa
@@ -75,6 +76,7 @@ switch($accion){
                     , cp.Descuento AS descuento
                     , cp.Total AS total
                     , cp.Comentarios AS comentarios
+                    , cp.EnPreparacion AS en_preparacion
                 FROM tb_comandas_productos cp
                     INNER JOIN tb_productos p ON p.id = cp.IdProducto
                     INNER JOIN tb_cat_productos c ON c.id = p.IdCategoria
@@ -91,9 +93,9 @@ switch($accion){
                 'Subtotal' => $data['subtotal'],
                 'DescuentoStr' => isset($data['descuento_str']) && $data['descuento_str'] != '' ? $data['descuento_str']  : '',
                 'Descuento' => $data['descuento'],
-                'ConIVA' => $data['con_iva'] == true ? 1 : 0,
-                'TasaIva' => $data['tasa_iva'] == true ? 1 : 0,
-                'IVA' => $data['iva'],
+                //'ConIVA' => $data['con_iva'] == true ? 1 : 0,
+                //'TasaIva' => $data['tasa_iva'] == true ? 1 : 0,
+                //'IVA' => $data['iva'],
                 // Agregar columnas del servicio
                 'Total' => $data['total'],
                 'IdAtiende' => $data['id_usuario'],
@@ -121,7 +123,8 @@ switch($accion){
                         'Cantidad' => isset($p['cantidad']) ? $p['cantidad'] : 0,
                         // Aquí va el descuento, pero todavía no lo tenemos listo
                         'Total' => isset($p['total']) ? $p['total'] : 0,
-                        'Comentarios' => isset($p['comentarios']) ? $p['comentarios'] : ''
+                        'Comentarios' => isset($p['comentarios']) ? $p['comentarios'] : '',
+                        'EnPreparacion' => 1
                     );
                     if (isset($p['id_registro']) && $p['id_registro'] > 0){
                         // Update
@@ -136,6 +139,11 @@ switch($accion){
                     }
                 }
                 $response = array ('id_registro' => $id_comanda, 'message' => 'Los datos se han guardado.');
+                // Ahora se imprime el ticket de la comanda en cocina
+                // update a la comanda para marcarla como cobrada/cerrada
+                $c = $data;
+                $c['nombre'] =  'C-' . $c['id_mesa'] . '-' . $id_comanda;
+                require ROOTPATH . 'lib/printer_cocina.php'; 
             } else {
                 $error = $db->executeError();
                 $response = array ('id_registro' => 0, 'message' => 'Error al guardar: ' . $error['db_message']);
@@ -243,6 +251,23 @@ switch($accion){
         } else {
             $error = $db->executeError();
             $response = array ('id_registro' => 0, 'message' => 'Error al cancelar: ' . $error['db_message']);
+        }
+        echo json_encode($response);
+        exit;
+    break;
+    case 'cerrar_comanda':
+        $id_registro = isset($data['id_registro'] ) ? $data['id_registro']  : 0;
+        $comanda = array(
+            'OrdenCerrada' => 1,
+            'IdUsuarioModifica' => $_SESSION['id'],
+            'FechaModifica' => date('Y-m-d H:i:s')
+        );
+        $id_comanda = $db->updateById('tb_comandas', $comanda, 'id', $id_registro);
+        if ($id_comanda !== false){
+            $response = array ('id_registro' => $id_comanda, 'message' => 'La comanda ha sido cerrada');
+        } else {
+            $error = $db->executeError();
+            $response = array ('id_registro' => 0, 'message' => 'Error al cerrar: ' . $error['db_message']);
         }
         echo json_encode($response);
         exit;

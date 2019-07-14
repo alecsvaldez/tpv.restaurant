@@ -10,7 +10,7 @@ include_once 'config.php';
                 <div class="header_portion btn-primary active fix">
                     <div class="fix pull-left" style="width:70%;">
                         <p class="order_number">{{c.comanda}}</p>
-                        <p class="order_number"><i class="fa fa-cutlery"></i>: N/D</p>
+                        <p class="order_number"><i class="fa fa-cutlery"></i>: {{ c.mesa }}</p>
                     </div>
                     <div class="fix pull-left" style="width:30%;">
                         <p class="order_duration dark-blue-background text-small">
@@ -37,7 +37,7 @@ include_once 'config.php';
                             <span class="fil-width">
                             <input type="text" tabindex="-1" value="0.00" readonly name="subtotal" id="subtotal" ng-model="c.subtotal"></span>
                         </p>
-                        <p>
+                        <!-- <p>
                             <span class="fl-width">Dcto/%:</span>
                             <span class="sl-width">
                                 <input type="text" maxlength="6" onfocus="this.select()" ng-model="c.descuento_str" value=""  name="descuento" id="descuento" class="discount" autocomplete="off" ng-keyup="checkDiscount(c);">
@@ -46,7 +46,7 @@ include_once 'config.php';
                             <span class="fil-width">
                                 <input type="text" tabindex="-1" ng-model="c.descuento" value="0.00" readonly name="descuento_total" id="descuento_total">
                             </span>
-                        </p>
+                        </p> -->
                         <p>
                             <span class="fl-width"></span>
                             <span class="sl-width"></span>
@@ -123,7 +123,7 @@ include_once 'config.php';
                                 <p>
                                     <span class="fl-width">Productos: </span>
                                     <span class="sl-width" >{{comanda.count_items}}</span>
-                                    <span class="tl-width">Subtotal:</span>
+                                    <span class="tl-width">Consumo:</span>
                                     <span class="fil-width text-right">$ {{ comanda.subtotal}}</span>
                                 </p>
                                 <p>
@@ -131,6 +131,12 @@ include_once 'config.php';
                                     <span class="sl-width">{{ comanda.descuento_str }}</span>
                                     <span class="tl-width">Total Desc:</span>
                                     <span class="fil-width text-right">$ {{ comanda.descuento }}</span>
+                                </p>
+                                <p>
+                                    <span class="fl-width"></span>
+                                    <span class="sl-width"></span>
+                                    <span class="tl-width">Subtotal:</span>
+                                    <span class="fil-width text-right">$ {{ comanda.subtotal }}</span>
                                 </p>
                                 <p>
                                     <span class="fl-width"></span>
@@ -172,7 +178,7 @@ include_once 'config.php';
         position: relative;
         height: 500px;
     }
-    .items_holder { min-height: 260px; }
+    .items_holder { height: 260px; overflow-y: auto }
     .single_item {
         display: flex
     }
