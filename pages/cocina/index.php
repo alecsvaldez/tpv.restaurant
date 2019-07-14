@@ -26,6 +26,7 @@ include_once 'config.php';
                             'selected': p.selected,
                             'cooking': p.cooking,
                             'done': p.done,
+                            'deliver': p.deliver,
                         }"
                         ng-click="toggleSelected(p)"
                         >
@@ -41,6 +42,8 @@ include_once 'config.php';
                                 <span ng-if="p.cooking"><i class="fa fa-fire"></i> Cocinando</span>
                                 <span ng-if="p.done"><i class="fa fa-check"></i> Terminado</span>
                             </p>
+                            <p ng-if="p.cooking"><i class="fa fa-clock-o"></i> <span class="text-sm" am-time-ago="p.start_cooking"></span></p>
+                            <p ng-if="p.cooking && p.selected"><button class="btn btn-success" ng-click="terminar(p); $event.stopPropagation();">Terminar</button> </p>
                         </div>
                     </div>
                 </div>
@@ -53,7 +56,6 @@ include_once 'config.php';
                 <button class="btn" ng-clikc="cerrarOrden(c)" ng-if="c.completa">Terminar</button>
             </div>
         </div>   
-        <div class="">{{selected | json}}</div>
     </div>
 </div>
 
@@ -182,8 +184,7 @@ include_once 'config.php';
     .single_item.selected .item_name i {
         font-size: 20px;
     }
-    .single_item.selected, 
-    .light-sky-background {
+    .single_item.selected {
         background-color: #0392bd;
         color: white
     }
@@ -194,9 +195,12 @@ include_once 'config.php';
     .single_item.selected.cooking {
         background-color: #ff4700;
     }
-    .single_item.done,
-    .green-background {
+    .single_item.done {
         background-color: #5DB745;
+        color: white;
+    }
+    .single_item.deliver {
+        background-color: #b00;
         color: white;
     }
     .single_order_button_holder {

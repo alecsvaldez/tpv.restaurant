@@ -88,14 +88,14 @@ $menu_top = array(
             'ADMIN','COCINA'
         )
     ),    
-    'bar' => array(
-        'url'   => $site_url . 'bar',
-        'label' => 'Barra',
-        'icon'  => 'fa fa-glass',
-        'permissions' => array(
-            'ADMIN','BARRA'
-        )
-    ),    
+    // 'bar' => array(
+    //     'url'   => $site_url . 'bar',
+    //     'label' => 'Barra',
+    //     'icon'  => 'fa fa-glass',
+    //     'permissions' => array(
+    //         'ADMIN','BARRA'
+    //     )
+    // ),    
     'purchases' => array(
         'url'   => $site_url . 'compras',
         'label' => 'Compras',

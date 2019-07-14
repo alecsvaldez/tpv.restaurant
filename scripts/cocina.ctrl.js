@@ -14,8 +14,18 @@ angular.module('app', ['angularMoment']).controller('cocina', function ($scope, 
     // init
     $scope.getComandas()
 
-    $scope.toggleSelected = (p) => {
-        p.selected = p.selected ? false : true
+    $scope.openProduct = (p) => {
+        $scope.producto = p
+        $('#modal-producto').modal('show')
+    }
+
+    $scope.toggleSelected = (p, status) => {
+        if (p.deliver) return 
+        if (status == undefined) {
+            p.selected = p.selected ? false : true
+        } else {
+            p.selected = status
+        }
         if (p.selected) {
             //buscamos el producto en selected, si no está lo agregamos
             var existe = $scope.selected.find(s => s.id_registro == p.id_registro)
@@ -30,30 +40,15 @@ angular.module('app', ['angularMoment']).controller('cocina', function ($scope, 
         }
     }
 
-    
-    
     $scope.seleccionarTodo = (c) => {        
         var selected = c.productos.filter(p => p.selected)
         if (selected.length == c.productos.length) {
-            // todo seleccionado, quitamos selected
-            c.productos.map(p => {
-                p.selected = false
-            })
-            // los quitamos de selected
             c.productos.forEach(p => {
-                var existe = $scope.selected.findIndex(s => s.id_registro == p.id_registro)
-                if (existe >= 0) {
-                    $scope.selected.splice(existe, 1);
-                }
+                $scope.toggleSelected(p, false)
             })
         } else {
-            c.productos.map(p => {
-                p.selected = true
-                // los agregamos a selected
-                var existe = $scope.selected.find(s => s.id_registro == p.id_registro)
-                if (!existe) {
-                    $scope.selected.push(p)
-                }
+            c.productos.forEach(p => {
+                $scope.toggleSelected(p, true)
             })
         }
     }
@@ -69,18 +64,29 @@ angular.module('app', ['angularMoment']).controller('cocina', function ($scope, 
             return
         } 
         productos.map(p => {
+            if (p.cooking || p.done || p.deliver) return 
             p.cooking = true
+            p.start_cooking = new Date()
             p.selected = false
-            var existe = $scope.selected.findIndex(s => s.id_registro == p.id_registro)
-            if (existe >= 0) {
-                $scope.selected.splice(existe, 1);
-            }
+            $scope.toggleSelected(p, false)
             return true
         })
-        c.hay_cocinando = true
+        c.hay_cocinando = true        
     }
 
     $scope.servir = (c) => {
+        c.productos.forEach(p => {
+            if (p.done) {
+                p.deliver = true
+            }
+            $scope.toggleSelected(p, false)
+        })
         
+    }
+
+    $scope.terminar = (p) => {
+        p.cooking = false
+        p.done = true
+        $scope.toggleSelected(p, false)
     }
 })

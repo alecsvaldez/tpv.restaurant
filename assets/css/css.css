@@ -96,6 +96,11 @@ h1, h2, h3, h4, h5, h6 {
 .pt-5 { padding-top: 5px !important; }
 .pb-5 { padding-bottom: 5px !important; }
 
+/* global */
+.text-sm { font-size: 80% !important; }
+.text-lg { font-size: 120% !important; }
+
+
 /* login */
 .login-wrapper {
     height: auto;
