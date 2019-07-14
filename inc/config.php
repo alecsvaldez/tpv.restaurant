@@ -80,10 +80,18 @@ $menu_top = array(
             'ADMIN','MESAS'
         )
     ),
-    'kitchen' => array(
-        'url'   => $site_url . 'cocina',
-        'label' => 'Cocina',
-        'icon'  => 'fa fa-fire',
+    // 'kitchen' => array(
+    //     'url'   => $site_url . 'cocina',
+    //     'label' => 'Cocina',
+    //     'icon'  => 'fa fa-fire',
+    //     'permissions' => array(
+    //         'ADMIN','COCINA'
+    //     )
+    // ),    
+     'checkout' => array(
+        'url'   => $site_url . 'caja',
+        'label' => 'Caja',
+        'icon'  => 'fa fa-shopping-cart',
         'permissions' => array(
             'ADMIN','COCINA'
         )

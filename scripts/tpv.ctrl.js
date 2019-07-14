@@ -12,6 +12,7 @@ angular.module('app', []).controller('tpv', function ($scope, $http) {
     $scope.categoria = {}
 
     $scope.enable_product_discount = false
+    $scope.enable_total_discount = false
     $scope.nuevaComanda = (apply = false) => {
         var activa = $scope.comandas.find(c => c.activa)
         if (activa) activa.activa = false

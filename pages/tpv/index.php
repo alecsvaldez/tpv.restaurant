@@ -61,7 +61,7 @@ include_once 'config.php';
                         <p>
                             <span class="fl-width">Descuento/%:</span>
                             <span class="sl-width">
-                                <input type="text" maxlength="6" onfocus="this.select()" ng-model="comanda.descuento_str" value=""  name="descuento" id="descuento" class="discount" autocomplete="off" ng-keyup="checkDiscount();">
+                                <input type="text" maxlength="6" onfocus="this.select()" ng-model="comanda.descuento_str" value=""  name="descuento" id="descuento" class="discount" autocomplete="off" ng-keyup="checkDiscount();" ng-disabled="!enable_total_discount">
                             </span>
                             <span class="tl-width">Total Desc:</span>
                             <span class="fil-width">
@@ -232,9 +232,7 @@ include_once 'config.php';
 <script src="<?php echo $site_assets?>plugins/keyboard/jquery.keyboard.extension-typing.min.js"></script>
 <!-- Fullscreen -->
 <script src="<?php echo $site_assets?>plugins/fullscreen/jquery.fullscreen.js"></script>
-<script>
-    
-</script>
+
 <style>
     .content-wrapper { height: calc(100vh - 95px) !important; overflow: hidden; }
     .content-wrapper .content { height: 100%; padding-top: 10px;}
@@ -277,25 +275,7 @@ include_once 'config.php';
         width: 100%;
         color: #000;
     }
-    .fl-width {
-        display: inline-block;
-        font-size: 13px;
-        width: 21.5%;
-    }
-    .sl-width {
-        display: inline-block;
-        width: 18%;
-    }
-    .tl-width {
-        display: inline-block;
-        font-size: 13px;
-        text-align: right;
-        width: 22%;
-    }
-    .fil-width {
-        display: inline-block;
-        width: 33%;
-    }
+
     .calculation-area input {
         width: 100%;
     }

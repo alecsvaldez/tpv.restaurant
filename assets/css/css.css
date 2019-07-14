@@ -99,7 +99,12 @@ h1, h2, h3, h4, h5, h6 {
 /* global */
 .text-sm { font-size: 80% !important; }
 .text-lg { font-size: 120% !important; }
+.fix { overflow: hidden; }
 
+/* border */
+.b-a {border-width: 1px; border-style: solid; border-color: rgba(0, 0, 0, 0.5) }
+.b-t {border-top-width: 1px; border-top-style: solid; border-top-color: rgba(0, 0, 0, 0.5) }
+.b-b {border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgba(0, 0, 0, 0.5) }
 
 /* login */
 .login-wrapper {
@@ -1052,5 +1057,24 @@ h1, h2, h3, h4, h5, h6 {
     color: white;
 }
 
+.fl-width {
+    display: inline-block;
+    font-size: 13px;
+    width: 21.5%;
+}
+.sl-width {
+    display: inline-block;
+    width: 18%;
+}
+.tl-width {
+    display: inline-block;
+    font-size: 13px;
+    text-align: right;
+    width: 22%;
+}
+.fil-width {
+    display: inline-block;
+    width: 33%;
+}
 
 

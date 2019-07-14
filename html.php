@@ -209,8 +209,8 @@ if (!is_logged()){
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="<?php echo $site_url ?>perfil"><i class="fa fa-circle-o"></i>Mi Perfil</a></li>
-                                <li><a href="<?php echo $site_url ?>cambiar-password"><i class="fa fa-circle-o"></i>Cambiar contraseña</a></li>
+                                <!-- <li><a href="<?php echo $site_url ?>perfil"><i class="fa fa-circle-o"></i>Mi Perfil</a></li>
+                                <li><a href="<?php echo $site_url ?>cambiar-password"><i class="fa fa-circle-o"></i>Cambiar contraseña</a></li> -->
                                 <li><a href="<?php echo $site_url ?>logout"><i class="fa fa-circle-o"></i>Salir</a></li>
                             </ul>
                         </li>  
