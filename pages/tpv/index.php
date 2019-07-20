@@ -97,7 +97,7 @@ include_once 'config.php';
                     </div>
                     <div class="btn-area " style="margin-bottom: 9px">
                         <div class="btn-group-custom">
-                            <button type="button" class="btn btn-danger" id="btn-cancel" ng-disabled="comanda.productos.length == 0" ng-click="cancelarComanda(comanda)" style="width: 24%">Cancelar</button>
+                            <!-- <button type="button" class="btn btn-danger" id="btn-cancel" ng-disabled="comanda.productos.length == 0" ng-click="cancelarComanda(comanda)" style="width: 24%">Cancelar</button> -->
                             <!-- <button type="button" class="btn btn-warning" id="btn-hold" ng-disabled="comanda.productos.length == 0" style="width: 24%">En Espera</button> -->
                             <button type="button" class="btn btn-green" id="btn-ticket" ng-disabled="comanda.productos.length == 0" style="width: 20%"  ng-click="generarCuenta()">Cuenta</button>
                             <button type="button" class="btn btn-success" id="btn-place-order" ng-disabled="comanda.productos.length == 0" ng-click="colocarOrden()" style="width: 29%">Colocar Orden</button>

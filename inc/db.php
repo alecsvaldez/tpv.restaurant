@@ -213,8 +213,13 @@ class db {
                 ' . $col . ' = :' . $col . ',';
             }
             $sql = trim($sql,',');
-            $sql .= "
-            WHERE " . $pk . " = :" . $pk;
+            if (is_array($id)){
+                $sql .= "
+                WHERE " . $pk . " IN (" . implode(',', $id) . ')';
+            } else {
+                $sql .= "
+                WHERE " . $pk . " = :" . $pk;
+            }
             self::$sql = $sql;
             if (self::$show_sql){
                 self::showSql($data);
@@ -226,7 +231,9 @@ class db {
                     if ($col == $pk) continue;
                     self::bind(':' . $col, $val);
                 }
-                self::bind(':' . $pk, $id);
+                if (!is_array($id)){
+                    self::bind(':' . $pk, $id);
+                }
                 self::execute();
                 return $id;
             } else {

@@ -112,14 +112,22 @@ $menu_top = array(
             'ADMIN','RECADMIN','STOCK'
         )
     ),
-    // 'summary' => array(
-    //     'url'   => $site_url . 'summary',
-    //     'label' => 'Reportes',
-    //     'icon'  => 'fa fa-list',
-    //     'permissions' => array(
-    //         'ADMIN','USER'
-    //     )
-    // ),
+    'summary' => array(
+        'url'   => $site_url . 'summary',
+        'label' => 'Reportes',
+        'icon'  => 'fa fa-list',
+        'permissions' => array(
+            'ADMIN'
+        )
+    ),
+    'eod' => array(
+        'url'   => $site_url . 'corte',
+        'label' => 'Corte de Caja',
+        'icon'  => 'fa fa-download',
+        'permissions' => array(
+            'ADMIN'
+        )
+    ),
     // 'alert-list' => array(
     //     'url'   => $site_url . 'alert-list',
     //     'label' => 'Pendientes',

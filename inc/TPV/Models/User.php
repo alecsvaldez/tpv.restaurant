@@ -80,5 +80,30 @@ class User {
             }
         }
         return array('result' => 'error');
-    }    
+    }
+    public function getAdminByPin($data){
+        $sql = "SELECT
+            u.id
+            , u.Nombre AS nombre
+            , u.Apellidos AS apellidos
+            , r.Rol AS rol
+        FROM tb_usuarios u
+            INNER JOIN tb_roles r ON r.id = u.IdRol
+        WHERE u.Activo = 1
+            AND u.IdRol IN (1, 2) -- Limitamos a Rol Admin y gerente
+            AND u.Pin = :pin";
+
+        $user = db::first($sql, $data);
+        if ($user !== false) {
+            if (count($user) > 0) {
+                return array(
+                    'result' => 'ok',
+                    'id' => $user['id'],
+                    'rol' => $user['rol'],
+                    'nombre' => strtok($user['nombre'], " ") . ' ' . strtok($user['apellidos'], " ")
+                );
+            }
+        }
+        return array('result' => 'error');
+    } 
 }

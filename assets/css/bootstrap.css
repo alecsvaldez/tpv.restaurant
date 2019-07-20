@@ -1359,18 +1359,18 @@ a.text-info:focus {
   color: #245269;
 }
 .text-warning {
-  color: #8a6d3b;
+  color: #faa511;
 }
 a.text-warning:hover,
 a.text-warning:focus {
-  color: #66512c;
+  color: #d88b07;
 }
 .text-danger {
-  color: #a94442;
+  color: #da322f;
 }
 a.text-danger:hover,
 a.text-danger:focus {
-  color: #843534;
+  color: #c01c19;
 }
 .bg-primary {
   color: #fff;
@@ -2881,10 +2881,10 @@ select[multiple].input-lg {
 .has-error.checkbox label,
 .has-error.radio-inline label,
 .has-error.checkbox-inline label {
-  color: #a94442;
+  color: #da322f;
 }
 .has-error .form-control {
-  border-color: #a94442;
+  border-color: #da322f;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
@@ -2894,12 +2894,12 @@ select[multiple].input-lg {
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
 }
 .has-error .input-group-addon {
-  color: #a94442;
+  color: #da322f;
   background-color: #f2dede;
-  border-color: #a94442;
+  border-color: #da322f;
 }
 .has-error .form-control-feedback {
-  color: #a94442;
+  color: #da322f;
 }
 .has-feedback label ~ .form-control-feedback {
   top: 25px;
@@ -2912,6 +2912,7 @@ select[multiple].input-lg {
   margin-top: 5px;
   margin-bottom: 10px;
   color: #737373;
+  font-size: 12px;
 }
 @media (min-width: 768px) {
   .form-inline .form-group {

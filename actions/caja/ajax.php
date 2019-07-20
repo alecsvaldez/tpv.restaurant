@@ -11,6 +11,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 }
 
 switch($accion){
+    case 'admin_pin':
+        if (!isset($_GET['id'])){
+            echo json_encode(array('id_usuario' => 0, 'message' => 'No hay Pin.'));exit;
+        }
+        $user = (new User)->getAdminByPin(array('pin' => $_GET['id']));
+        if ($user !== false &&  $user['result'] == 'ok') {
+            $admin = array(
+                'id_usuario' => $user['id'],
+                'rol' => $user['rol'],
+                'nombre' => $user['nombre']
+            );
+            $response = $admin;
+        } else {
+            $response = array('id_usuario' => 0, 'message' => 'Pin Incorrecto.');
+        }
+        echo json_encode($response);
+        exit;
+        break;
     case 'comandas':
         // Traemos las comandas existentes
         $comandas_db = $db->get("SELECT 
@@ -39,7 +57,7 @@ switch($accion){
             LEFT JOIN tb_mesas m ON m.id = c.IdMesa
         WHERE c.Estatus = 1
             AND OrdenCerrada = 1
-            -- AND OrdenPagada = 0
+            AND OrdenPagada = 0
             -- AND IdTicket = 0
         ORDER BY c.id");
 
@@ -68,20 +86,62 @@ switch($accion){
         echo json_encode($comandas);
         exit;
     break;
-    case 'cobrar_comanda':
-        $id_registro = isset($data['id_registro'] ) ? $data['id_registro']  : 0;
+    case 'regresar_comanda':
+        $id_registro = isset($data['id_registro']) ? $data['id_registro']  : 0;
         $comanda = array(
-            'OrdenPagada' => 1,
+            'OrdenCerrada' => 0,
+            'IdUsuarioCierra' => $_SESSION['id'],
+            'FechaCierra' => date('Y-m-d H:i:s')
+        );
+        $id_comanda = $db->updateById('tb_comandas', $comanda, 'id', $id_registro);
+        if ($id_comanda !== false) {
+            $response = array('id_registro' => $id_comanda, 'message' => 'La comanda ha sido regresada');
+        } else {
+            $error = $db->executeError();
+            $response = array('id_registro' => 0, 'message' => 'Error al regresar comanda: ' . $error['db_message']);
+        }
+        echo json_encode($response);
+        exit;
+        break;    
+    case 'cancelar_comanda':
+        $id_registro = isset($data['id_registro']) ? $data['id_registro']  : 0;
+        $comanda = array(
+            'Estatus' => 0,
+            'IdUsuarioCancela' => $data['id_autoriza_cancela'],
+            'FechaCancela' => date('Y-m-d H:i:s'),
             'IdUsuarioModifica' => $_SESSION['id'],
             'FechaModifica' => date('Y-m-d H:i:s')
+        );
+        $id_comanda = $db->updateById('tb_comandas', $comanda, 'id', $id_registro);
+        if ($id_comanda !== false) {
+            $response = array('id_registro' => $id_comanda, 'message' => 'La comanda ha sido cancelada');
+        } else {
+            $error = $db->executeError();
+            $response = array('id_registro' => 0, 'message' => 'Error al cancelar: ' . $error['db_message']);
+        }
+        echo json_encode($response);
+        exit;
+    break;
+    case 'cobrar_comanda':
+        $id_registro = isset($data['id_registro'] ) ? $data['id_registro']  : 0;
+        // "tarjeta": "20", "cambio": 6, "efectivo": "30", "tarjeta_banco": "sd", "tarjeta_num": "asd"}: 
+        $comanda = array(
+            'OrdenPagada' => 1,
+            'Pagado' => (isset($data['efectivo']) ? $data['efectivo'] : 0) + (isset($data['tarjeta']) ? $data['tarjeta'] : 0),
+            'Cambio' => isset($data['cambio']) ? $data['cambio'] : NULL,
+            'Efectivo' => isset($data['efectivo']) ? $data['efectivo'] : 0,
+            'Tarjeta' => isset($data['tarjeta']) ? $data['tarjeta'] : 0,
+            'Banco' => isset($data['tarjeta_banco']) ? $data['tarjeta_banco'] : NULL,
+            'NoTarjeta' => isset($data['tarjeta_num']) ? $data['tarjeta_num'] : NULL,
+            'IdUsuarioCobra' => $_SESSION['id'],
+            'FechaCobra' => date('Y-m-d H:i:s')
         );
         $id_comanda = $db->updateById('tb_comandas', $comanda, 'id', $id_registro);
         if ($id_comanda !== false){
             $response = array ('id_registro' => $id_comanda, 'message' => 'La comanda ha sido cerrada');
             $c = $data;
-            // echo '<pre>';print_r($c);echo'</pre>';
             // update a la comanda para marcarla como cobrada/cerrada
-            require ROOTPATH . 'lib/printer.php'; 
+            //require ROOTPATH . 'lib/printer.php'; 
         } else {
             $error = $db->executeError();
             $response = array ('id_registro' => 0, 'message' => 'Error al cerrar: ' . $error['db_message']);

@@ -33,7 +33,6 @@ switch($accion){
             $id = $_GET['id'];
             $comanda = $db->first("SELECT
                 c.id AS id_registro
-                --, CONCAT(c.Comanda, '-', c.id) AS nombre
                 , CONCAT('C-', c.id) AS nombre
                 , CONCAT('C-', c.id) AS comanda
                 , c.Comanda AS nombre
@@ -259,8 +258,8 @@ switch($accion){
         $id_registro = isset($data['id_registro'] ) ? $data['id_registro']  : 0;
         $comanda = array(
             'OrdenCerrada' => 1,
-            'IdUsuarioModifica' => $_SESSION['id'],
-            'FechaModifica' => date('Y-m-d H:i:s')
+            'IdUsuarioCierra' => $_SESSION['id'],
+            'FechaCierra' => date('Y-m-d H:i:s')
         );
         $id_comanda = $db->updateById('tb_comandas', $comanda, 'id', $id_registro);
         if ($id_comanda !== false){

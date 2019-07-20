@@ -1,4 +1,4 @@
-angular.module('app', []).controller('tpv', function ($scope, $http) {
+var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
     $scope.comandas = []
     $scope.categorias = []
     $scope.productos = []

@@ -1078,3 +1078,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+.label-checkbox {
+    font-weight: normal;
+}
+
+.label-checkbox input[type=checkbox] {
+    width: 0px
+}
+
+.label-checkbox:before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 1px solid silver;
+    border-radius: 50px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.label-checkbox.checked:before {
+    border-width: 3px;
+    border-color: #fff;
+    background: #00a514;
+    box-shadow: 0 0 0 1px #00a514
+}

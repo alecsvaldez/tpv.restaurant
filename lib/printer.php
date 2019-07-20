@@ -6,7 +6,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 // use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 
 // Conexión por Impresora compartida
-$nombre_impresora = "XP80CCaja";
+$nombre_impresora = "POSVirtual";
 $connector = new WindowsPrintConnector($nombre_impresora);
 // Conexión por IP
 // $connector = new NetworkPrintConnector("192.168.100.3", 9001);
