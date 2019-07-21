@@ -59,7 +59,9 @@ $servicio = 0;
 
 $balance_inicial = $db->first("SELECT BalanceFin FROM tb_cortes_caja ORDER BY id DESC LIMIT 1");
 $balance_inicial = $balance_inicial['BalanceFin'];
-
+if(is_null($balance_inicial )){
+    $balance_inicial = 0;
+}
 ?>
 <section class="content-header">
     <div class="row">
@@ -116,12 +118,12 @@ $balance_inicial = $balance_inicial['BalanceFin'];
                                             <td nowrap><?php echo dateToString($d['fecha_cobra']) ?><br><small><?php echo dateToString($d['fecha_crea']) ?></small></td>
                                             <td><?php echo $d['comanda'] ?><br><small class="text-muted"><?php echo $d['mesa'] ?></small></td>
                                             <td class="text-success"><?php echo getMoney($d['total']) ?></td>
-                                            <td class="text-primary"><?php echo getMoney($d['tarjeta']) ?></td>
-                                            <td class="text-warning"><?php echo getMoney($d['efectivo']) ?></td>
+                                            <td class="text-primary"><?php echo getMoney($d['efectivo']) ?></td>
+                                            <td class="text-warning"><?php echo getMoney($d['tarjeta']) ?></td>
                                             <td class="text-danger"><?php echo getMoney($d['servicio']) ?> </td>
                                             <td><?php echo $d['usuario_cobra'] ?></td>
                                             <td class="text-center">
-                                                <div class="btn-group">
+                                                <!-- <div class="btn-group">
                                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                                         <i class="fa fa-gear tiny-icon"></i> <span class="caret"></span>
                                                     </button>
@@ -129,7 +131,7 @@ $balance_inicial = $balance_inicial['BalanceFin'];
                                                         <li><a href="<?php echo $current_url . 'editor/' . $d['id'] ?>"><i class="fa fa-pencil tiny-icon"></i> Editar</a></li>
                                                         <li><a href="<?php echo $current_url . 'borrar/' . $d['id'] ?>" class="delete"><i class="fa fa-trash tiny-icon"></i> Borrar</a></li>
                                                     </ul>
-                                                </div>
+                                                </div> -->
                                             </td>
                                         </tr>
                                         <?php
@@ -279,7 +281,7 @@ $balance_inicial = $balance_inicial['BalanceFin'];
         var balance_final = $('#balance-final').val()
         var faltante = 0
 
-        var caja = parseFloat(balance_inicial) + parseFloat(efectivo)
+        var caja = parseFloat(balance_inicial || 0) + parseFloat(efectivo)
         var faltante = caja - balance_final
 
         $('#faltante').val(faltante.toFixed(2))

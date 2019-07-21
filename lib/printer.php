@@ -6,7 +6,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 // use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 
 // Conexión por Impresora compartida
-$nombre_impresora = "POSVirtual";
+$nombre_impresora = "XPCaja";
 $connector = new WindowsPrintConnector($nombre_impresora);
 // Conexión por IP
 // $connector = new NetworkPrintConnector("192.168.100.3", 9001);
@@ -34,14 +34,14 @@ try {
     $printer->bitImage($logo);
     $printer->text("\n\n");
     // cabecera
-    $printer->text("Intimus la terraza" . "\n");
+    $printer->text("Burger & Grill" . "\n");
     $printer->text("Restaurante Bar y Parrilla" . "\n");
     $printer->text(date("d-m-Y H:i:s") . "\n\n");
     
     // Información de cuenta
     $printer->setJustification(Printer::JUSTIFY_LEFT);
 
-    $printer->text("Orden No: " . $c['nombre'] . '. Cliente: General' . "\n");
+    $printer->text("Orden No: " . $c['nombre'] . '. Cliente: Burger & Grill' . "\n");
     $printer->text('------------------------------------------------' . "\n");
     $printer->text('Cant Concepto                     $        Total' . "\n");
     $printer->text('------------------------------------------------' . "\n");
@@ -87,7 +87,10 @@ try {
         Esto es útil cuando la tenemos conectada
         por ejemplo a un cajón
     */
-    //$printer->pulse();
+    if (isset($abrir_caja) && $abrir_caja){
+        $printer->pulse();
+    }
+    
 } finally {
     /*
         Para imprimir realmente, tenemos que "cerrar"

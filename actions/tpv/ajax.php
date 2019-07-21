@@ -68,6 +68,7 @@ switch($accion){
                     cp.id AS id_registro
                     , cp.IdProducto AS id_producto
                     , p.Producto AS nombre
+                    , p.IdCategoria AS id_categoria
                     , c.Categoria AS categoria
                     , cp.Precio AS precio
                     , CASE (cp.Cantidad MOD 1 > 0) WHEN true THEN ROUND(cp.Cantidad, 2) ELSE ROUND(cp.Cantidad, 0) END AS cantidad
@@ -212,6 +213,7 @@ switch($accion){
                     m.id AS id
                     , p.id AS id_producto
                     , Producto AS nombre
+                    , p.IdCategoria AS id_categoria
                     , Categoria AS categoria
                     , Precio AS precio
                     , Costo AS costo
@@ -228,6 +230,7 @@ switch($accion){
             if (!isset($categorias[$categoria])){
                 $categorias[$categoria] = array(
                     'id' => $categoria,
+                    'id_categoria' => $p['id_categoria'],
                     'categoria' => $p['categoria'],
                     'productos' => array()
                 );
@@ -264,6 +267,9 @@ switch($accion){
         $id_comanda = $db->updateById('tb_comandas', $comanda, 'id', $id_registro);
         if ($id_comanda !== false){
             $response = array ('id_registro' => $id_comanda, 'message' => 'La comanda ha sido cerrada');
+            // generamos la cuenta
+            $c = $data;
+            require ROOTPATH . 'lib/printer.php'; 
         } else {
             $error = $db->executeError();
             $response = array ('id_registro' => 0, 'message' => 'Error al cerrar: ' . $error['db_message']);

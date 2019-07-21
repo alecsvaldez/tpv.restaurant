@@ -192,7 +192,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
     var tasa_iva = 16
     var tasa_servicio = 10
     $(document).ready(function () {
-        //setUsuarioTPV()
+        setUsuarioTPV()
 
         //fullscreen
         $('body').on('click', '#btn-fullscreen.enterFullScreen', function () {
@@ -357,7 +357,10 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
         })
     }
     $scope.colocarOrden = () => {
-        $scope.comanda.id_mesa = $('#mesa-comanda').find('option:selected').val()
+        if ($scope.comanda.id_mesa == undefined || $scope.comanda.id_mesa == 0 || $scope.comanda.id_mesa == -1){
+            $scope.comanda.id_mesa = $('#mesa-comanda').find('option:selected').val()
+        }
+        
 
         if ($scope.comanda.id_mesa < 0) {
             Swal.fire({
