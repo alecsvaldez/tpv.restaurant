@@ -150,7 +150,7 @@ include_once 'config.php';
                             <div class="product-items">
                                 <a  ng-repeat="p in categoria.productos" 
                                     ng-click="addProducto(p)"
-                                    ng-style="{'background-image': 'linear-gradient(rgba(88, 147, 208, 0.4), rgba(255,255,255,0.4)), url(/uploads/productos/' + p.id_producto + '.jpg)'}"
+                                    ng-style="{'background-image': 'linear-gradient(rgba(88, 147, 208, 0.4), rgba(255,255,255,0.4)), url(/uploads/productos/' + p.id_producto + '.jpg?v=' + random + ')'}"
                                     class="product-item">
                                     {{p.nombre}}
                                 </a>

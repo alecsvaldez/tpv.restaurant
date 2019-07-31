@@ -2,7 +2,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
     $scope.comandas = []
     $scope.categorias = []
     $scope.productos = []
-
+    $scope.random = Math.random()
     $scope.comanda = {
         nombre: 'comanda',
         productos: [],

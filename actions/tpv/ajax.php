@@ -215,8 +215,8 @@ switch($accion){
                     , Producto AS nombre
                     , p.IdCategoria AS id_categoria
                     , Categoria AS categoria
-                    , Precio AS precio
-                    , Costo AS costo
+                    , IF(m.Precio > p.PrecioBase,m.Precio,p.PrecioBase) AS precio
+                    , p.CostoBase AS costo
                 FROM tb_productos p
                     INNER JOIN tb_cat_productos c ON c.id = p.IdCategoria
                     INNER JOIN tb_menus_productos m ON m.IdProducto = p.id

@@ -43,7 +43,10 @@ if ($id > 0){
     if (file_exists(ROOTPATH . '/uploads/productos/' . $id . '.jpg')){
         $foto = '/uploads/productos/' . $id . '.jpg';
         $foto_size = humanFileSize(filesize(ROOTPATH . $foto));
+        $foto .= '?r=' . rand();
     }
+} else {
+    $foto = '';
 }
 
 $categorias = $db->select('tb_cat_productos', array(
