@@ -33,7 +33,7 @@ $productos = $db->get("SELECT
                 , CostoBase AS costo
             FROM tb_productos p
                 INNER JOIN tb_cat_productos c ON c.id = p.IdCategoria
-                LEFT  JOIN tb_menus_productos m ON m.IdProducto = p.id AND m.IdMenu = $id_menu
+                LEFT  JOIN tb_menus_productos m ON m.IdProducto = p.id AND m.IdMenu = $id_menu AND m.Estatus = 1
             WHERE p.Estatus = 1
                 AND m.id IS NULL");
 

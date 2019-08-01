@@ -49,3 +49,6 @@ RewriteRule ^app/(.*)/(.*(\.php))$              /2/index.php?Seccion=$1&ver=$2 [
 RewriteRule ^app/(.*)/$                         /2/index.php?Seccion=$1 [QSA,L]
 RewriteRule ^app/?$                             /2/index.php?Seccion=sistemas_web [L]
 
+<FilesMatch "\.(pdf|jpg|jpeg|png|gif)$">
+    Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
+</FilesMatch>

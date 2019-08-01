@@ -72,7 +72,7 @@ unset($_SESSION['db_message']);
                                 <?php
                                 foreach($item['productos'] as $i){
                                     ?>
-                                    <div class="row row-producto m-0">
+                                    <div class="row row-producto m-0" data-id="<?php echo $i['id']?>">
                                         <input type="hidden" name="productos[<?php echo $i['id_producto']?>][id_registro]" value="<?php echo $i['id']?>">
                                         <input type="hidden" name="productos[<?php echo $i['id_producto']?>][id_producto]" value="<?php echo $i['id_producto']?>">
                                         <div class="col-xs-1"><?php echo $i['id']?></div>
@@ -80,10 +80,10 @@ unset($_SESSION['db_message']);
                                             <?php echo $i['producto']?><br>
                                             <small class="text-muted"><?php echo $i['categoria']?></small>
                                         </div>
-                                        <div class="col-xs-3"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control" name="productos[<?php echo $i['id_producto']?>][costo]" value="<?php echo $i['costo']?>"/></div></div>
-                                        <div class="col-xs-3"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control" name="productos[<?php echo $i['id_producto']?>][precio]" value="<?php echo $i['precio']?>"/></div></div>    
+                                        <div class="col-xs-3"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control" name="productos[<?php echo $i['id_producto']?>][costo]" value="<?php echo $i['costo']?>" readonly/></div></div>
+                                        <div class="col-xs-3"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control" name="productos[<?php echo $i['id_producto']?>][precio]" value="<?php echo $i['precio']?>" readonly/></div></div>    
                                         <div class="col-xs-1">
-                                            <a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter();"><i class="fa fa-trash"></i> </a>
+                                            <a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter(<?php echo $i['id']?>);"><i class="fa fa-trash"></i> </a>
                                         </div>
                                     </div>
                                     <?php
@@ -132,6 +132,20 @@ jQuery(document).ready(function(){
         addSelected()    
     })
 })
+function getProductos() {
+    $.ajax({
+        method: 'GET',
+        url: '/ajax/menus/productos/3',
+        dataType: 'json',
+        success: function(response){
+            $('.select-productos').empty();
+            response.forEach(p => {
+                var option = `<option value="${p.id}" data-categoria="${p.categoria}" data-costo="${p.costo}" data-precio="${p.precio}">${p.nombre}</option>`;
+                $('.select-productos').append(option);
+            })
+        }
+    })      
+}
 function addSelected() {
     var selected = $('.select-productos').find('option:selected')
     var list = $('#lista-productos')
@@ -139,18 +153,40 @@ function addSelected() {
         var $producto = $(selected[i])
         var attrs = $producto.data()
         var id_producto = $producto.val()
-        var div = $('<div class="row row-producto m-0">' + 
+        var div = $('<div class="row row-producto m-0" id="producto_' + id_producto + '">' + 
             '<input type="hidden" name="productos[' + id_producto + '][id_registro]" value="0">' +
             '<input type="hidden" name="productos[' + id_producto + '][id_producto]" value="' + id_producto + '">' +
             '<div class="col-xs-1">' + id_producto + '</div>' +
             '<div class="col-xs-4">' + $producto.html() + '<br><small class="text-muted">' + attrs.categoria + '</small></div>' +
-            '<div class="col-xs-3"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control" name="productos[' + id_producto + '][costo]" value="' + attrs.costo + '"/></div></div>' +
-            '<div class="col-xs-3"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control" name="productos[' + id_producto + '][precio]" value="' + attrs.precio + '"></div></div>' +
-            '<div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="delete();"><i class="fa fa-trash"></i> </a></div>' +
+            '<div class="col-xs-3"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control" name="productos[' + id_producto + '][costo]" value="' + attrs.costo + '" readonly/></div></div>' +
+            '<div class="col-xs-3"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control" name="productos[' + id_producto + '][precio]" value="' + attrs.precio + '" readonly></div></div>' +
+            '<div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="remove(' + id_producto + ');"><i class="fa fa-trash"></i> </a></div>' +
         '</div>');
         list.append(div)
     }
     $('.select-productos').find('option:selected').remove()
+}
+//borrar producto que aún no ha sido registrado en bdd
+function remove(id_producto){
+    $('div#producto_' + id_producto).remove()
+    getProductos()
+}
+// borrar registros existentes
+function deleter(id){
+    console.log('borrar ',id)
+    // Si hay una opcion seleccionada, vamos por el registro
+    var url = '/ajax/menus/quitar_producto/' + id
+    $.ajax({
+        method: 'GET',
+        url: url,
+        dataType: 'json',
+        success: function(response){
+            if (response.id_registro != undefined && response.id_registro == id){
+                var div = $('div[data-id="' + id + '"]').remove()
+                getProductos()
+            }
+        }
+    })      
 }
 </script>
 <style>
