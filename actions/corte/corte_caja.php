@@ -23,11 +23,11 @@ $data = array(
     'Servicio' => $_POST['servicio'],
     'Gastos' => $_POST['gastos'],
     'Retiro' => $_POST['retiro'],
+    'Fondo' => $_POST['fondo'],
     'EfectivoIngreso' => $_POST['efectivo-ingreso'],
     'BalanceFin' => $_POST['balance_final'],
     'Faltante' => $_POST['faltante'],
 );
-echo '<pre>';print_r($data);echo'</pre>';exit;
 if ($id > 0) {
     $data['IdUsuarioModifica'] = $_SESSION['id'];
     $data['FechaModifica'] = date('Y-m-d H:i:s');

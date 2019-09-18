@@ -58,8 +58,8 @@ $tarjeta = 0;
 $servicio = 0;
 $gastos = 0;
 $retiro = 0;
-$balance_inicial = $db->first("SELECT BalanceFin FROM tb_cortes_caja ORDER BY id DESC LIMIT 1");
-$balance_inicial = $balance_inicial['BalanceFin'];
+$balance_inicial = $db->first("SELECT Fondo FROM tb_cortes_caja ORDER BY id DESC LIMIT 1");
+$balance_inicial = $balance_inicial['Fondo'];
 if(is_null($balance_inicial )){
     $balance_inicial = 0;
 }
