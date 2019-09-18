@@ -58,7 +58,7 @@ try {
     if ($c['descuento']  > 0 ){
         $printer->text(fill('', 22) . '  Descuento:   $' .  fill($c['descuento'], 10, ' ', false) . "\n");
     }
-    if ($c['con_iva']){
+    if ($c['iva_desglosado']){
         $printer->text(fill('', 22) . '   Subtotal:   $' .  fill($c['subtotal'], 10, ' ', false) . "\n");
         $printer->text(fill('', 22) . '        IVA:   $' .  fill($c['iva'], 10, ' ', false) . "\n");
     }

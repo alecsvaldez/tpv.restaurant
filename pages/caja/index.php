@@ -23,7 +23,10 @@ include_once 'config.php';
                         <div ng-repeat="p in c.productos" class="single_item">
                             <div class="item_detail">
                                 <p class="item_name" style=""><i ng-if="p.selected" class="fa fa-check-circle"></i> &nbsp; {{ p.nombre }}</p>
-                                <p class="item_qty" style="font-weight:bold;">Cant: {{ p.cantidad }}</p>
+                                <p class="item_qty" style="font-weight:bold;">Cant: {{ p.cantidad }}
+                                <span class="item-price"> x  &nbsp; &nbsp; &nbsp; ${{ p.precio }} = </span> 
+                                <span class="item-price"><b>${{ p.total}}</b></span> 
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -240,6 +243,11 @@ include_once 'config.php';
 
     .single_item {
         display: flex
+    }
+    .item-price {
+        display: inline-block;
+        margin-left: 20px;
+        font-weight: normal !important;
     }
 
     .single_item .item_detail {

@@ -25,7 +25,7 @@ switch($accion){
             $response = array ('id_usuario' => 0, 'message' => 'Pin Incorrecto.');
         }
         echo json_encode($response);
-        exit;        
+        exit;
     break;
     case 'comanda': 
         $table = 'tb_comandas';
@@ -262,6 +262,9 @@ switch($accion){
         $id_registro = isset($data['id_registro'] ) ? $data['id_registro']  : 0;
         $comanda = array(
             'OrdenCerrada' => 1,
+            'SubtotalReal' => $data['subtotal_real'],
+            'Subtotal' => $data['subtotal'],
+            'Total' => $data['total'],
             'IdUsuarioCierra' => $_SESSION['id'],
             'FechaCierra' => date('Y-m-d H:i:s')
         );
