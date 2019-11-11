@@ -63,16 +63,15 @@ namespace TPV;
     <link rel="stylesheet" href="<?php echo $site_assets; ?>plugins/iCheck/square/blue.css">
     <script src="<?php echo $site_assets; ?>plugins/iCheck/iCheck.min.js"></script>
     <script>
-        // variables globales
-        var IdUsuario = <?php echo $_SESSION['id'] ?>
+        const IdUsuario = <?php echo $_SESSION['id'] ?>;
+        const URL = '<?php echo $site_url ?>'
+        const AJAX = '<?php echo $site_url ?>ajax/'
     </script>
-    <!-- Si hay archivo para la sección , lo cargamos -->
+    <!-- Si hay archivo para la sección, lo cargamos -->
     <?php
-    $ctrl_file = str_replace('./pages/', '', str_replace('/index', '', str_replace('.php', '',$render_page)));
-    echo '<!--' . $ctrl_file . '-->
-    ';
-    if (file_exists(ROOTPATH . 'scripts/' . $ctrl_file . '.ctrl.js')) { ?>
-        <script src="<?php echo $site_scripts . $ctrl_file ?>.ctrl.js"></script>
+    $ctrl_file = hasCtrlFile($render_page);
+    if ($ctrl_file) { ?>
+        <script src="<?php echo $site_scripts . $ctrl_file ?>"></script>
         <script src="<?php echo $site_scripts ?>angular.directives.js"></script>
     <?php
     }

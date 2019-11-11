@@ -1,6 +1,6 @@
 var app = angular.module('app', []).controller('cocina', function ($scope, $http) { 
     $scope.getComandas = () => {
-        $http.get('/ajax/cocina/comandas')
+        $http.get(AJAX + 'cocina/comandas')
             .then(function (response) {
                 $scope.comandas = response.data;
                 $scope.comandas.forEach(c => {

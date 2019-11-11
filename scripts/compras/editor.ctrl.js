@@ -1,7 +1,7 @@
 var app = angular.module('app', []).controller('compras_editor', function ($scope, $http) {
     
     $scope.getItem = () => {
-        $http.get('/ajax/compras/detalle/' + id)
+        $http.get( AJAX + 'compras/detalle/' + id)
             .then(function (response) {
                 $scope.item = response.data;
                 $scope.item.serial_id = ('00000' + $scope.item.id).slice(-5)

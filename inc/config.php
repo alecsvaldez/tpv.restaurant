@@ -1,24 +1,26 @@
 <?php
 namespace TPV;
 defined('_PUBLIC_ACCESS') or die();
-
 $region = 'esm';
+
 setlocale(LC_ALL, $region );
 // setlocale(LC_MONETARY, 'en_US');
 // setlocale(LC_NUMERIC, $region);
 
 /** Define ABSPATH as this file's directory */
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', dirname(basename( __FILE__ )) . '/' );
+    // root folder, in FILE format
+	define( 'ABSPATH', dirname( dirname(__FILE__) ) . '/' );
+}
+if ( ! defined( 'ROOTPATH' ) ) {
+    // root folder, in URL format
+    define( 'ROOTPATH', str_replace(ABSPATH, '/' , dirname( dirname(__FILE__) ) . '/' ) );
 }
 if ( ! defined( 'INC' ) ) {
 	define( 'INC', dirname( __FILE__ ) . '/' );
 }
 if ( ! defined( 'ENV' ) ) {
 	define( 'ENV', 'dev' );
-}
-if ( ! defined( 'ROOTPATH' ) ) {
-	define( 'ROOTPATH', ( ( $_SERVER['DOCUMENT_ROOT'] )) . '/' );
 }
 
 define('SITE_NAME','TPV_TERRAZA');

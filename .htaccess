@@ -39,6 +39,6 @@ RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)(\.html)?/?$                    
 RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$              ./index.php?seccion=$1&accion=$2&page=$3&id=$4 [QSA,L]
 RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)(\.html)?/?$        ./index.php?seccion=$1&subseccion=$2&accion=$3&page=$4 [QSA,L]
 RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$  ./index.php?seccion=$1&subseccion=$2&accion=$3&page=$4&id=$5 [QSA,L]
-<FilesMatch "\.(pdf|jpg|jpeg|png|gif)$">
-    Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
-</FilesMatch>
+#<FilesMatch "\.(pdf|jpg|jpeg|png|gif)$">
+#    Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
+#</FilesMatch>

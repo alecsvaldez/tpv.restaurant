@@ -3,7 +3,7 @@ var app = angular.module('app', ['angularMoment']).controller('caja', function (
     var tasa_servicio = 10
 
     $scope.getComandas = () => {
-        $http.get('/ajax/caja/comandas')
+        $http.get(AJAX + 'caja/comandas')
             .then(function (response) {
                 $scope.comandas = response.data;
                 $scope.comandas.forEach(c => {
@@ -147,7 +147,7 @@ var app = angular.module('app', ['angularMoment']).controller('caja', function (
             if (result.value) {
                 $.ajax({
                     method: 'POST',
-                    url: '/ajax/caja/cobrar-comanda',
+                    url: AJAX + 'caja/cobrar-comanda',
                     data: angular.toJson(c),
                     dataType: 'json',
                     async: false,
@@ -293,7 +293,7 @@ var app = angular.module('app', ['angularMoment']).controller('caja', function (
     }    
     function validateAdminPin() {
         var pin = $('.input-pin').val()
-        return fetch('/ajax/caja/admin-pin/' + pin)
+        return fetch(AJAX + 'caja/admin-pin/' + pin)
             .then(response => {
                 // response de XHR
                 if (!response.ok) {
@@ -319,7 +319,7 @@ var app = angular.module('app', ['angularMoment']).controller('caja', function (
     function sendReturn() {
         $.ajax({
             method: 'POST',
-            url: '/ajax/caja/regresar-comanda',
+            url: AJAX + 'caja/regresar-comanda',
             data: angular.toJson($scope.comanda),
             dataType: 'json',
             async: false,
@@ -344,7 +344,7 @@ var app = angular.module('app', ['angularMoment']).controller('caja', function (
         $scope.comanda.id_autoriza_cancela = json.id_usuario
         $.ajax({
             method: 'POST',
-            url: '/ajax/caja/cancelar-comanda',
+            url: AJAX + 'caja/cancelar-comanda',
             data: angular.toJson($scope.comanda),
             dataType: 'json',
             async: false,

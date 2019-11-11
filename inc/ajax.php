@@ -3,7 +3,8 @@ namespace TPV;
 define('_PUBLIC_ACCESS',1);
 require_once 'init.php';
 
-$file_path = ROOTPATH . 'actions/';
+$file_path = ABSPATH . 'actions/';
+
 $seccion = '';
 $subseccion = '';
 $accion = '';

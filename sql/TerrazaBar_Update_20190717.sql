@@ -1,8 +1,19 @@
-﻿ALTER TABLE tb_cortes_caja 
-  ADD COLUMN Retiro DECIMAL(10, 2) DEFAULT NULL  AFTER Gastos;;
-
---
--- Create column `Fondo` on table `tb_cortes_caja`
---
-ALTER TABLE tb_cortes_caja 
-  ADD COLUMN Fondo DECIMAL(10, 2) DEFAULT NULL AFTER Retiro;
+﻿CREATE TABLE TerrazaBar.tb_cortes_caja (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  FechaCorteInicio DATETIME DEFAULT NULL,
+  FechaCorteFin DATETIME DEFAULT NULL,
+  BalanceInicio DECIMAL(10, 2) DEFAULT 0.00,
+  BalanceFin DECIMAL(10, 2) DEFAULT 0.00,
+  EfectivoIngreso DECIMAL(10, 2) DEFAULT 0.00,
+  Faltante DECIMAL(10, 2) DEFAULT 0.00,
+  Servicio DECIMAL(10, 2) DEFAULT 0.00,
+  Gastos DECIMAL(10, 2) DEFAULT 0.00,
+  Retiro DECIMAL(10, 2) DEFAULT NULL,
+  Fondo DECIMAL(10, 2) DEFAULT NULL,
+  Efectivo DECIMAL(10, 2) DEFAULT 0.00,
+  Tarjeta DECIMAL(10, 2) DEFAULT 0.00,
+  Estatus TINYINT(1) DEFAULT 1,
+  IdUsuarioCrea INT(11) NOT NULL,
+  FechaCrea DATETIME NOT NULL,
+  PRIMARY KEY (id)
+)

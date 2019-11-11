@@ -1,7 +1,6 @@
 <?php
 namespace TPV;
 defined('_PUBLIC_ACCESS') or die();
-
 header('Content-Type: application/json');
 switch($accion){
     case 'detalle': 

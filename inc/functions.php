@@ -4,7 +4,8 @@ defined('_PUBLIC_ACCESS') or die();
 
 function __autoload($class_name) {
     $file = str_replace("\\", DIRECTORY_SEPARATOR, $class_name); 
-	require_once str_replace('\\', DIRECTORY_SEPARATOR, $_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . $file . ".php";
+    $autoload = str_replace('\\', DIRECTORY_SEPARATOR, ABSPATH ) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . $file . ".php";
+	require_once $autoload;
 }
 function allowed_request($request_type){
     if ($_SERVER['REQUEST_METHOD'] !== $request_type){
@@ -12,6 +13,16 @@ function allowed_request($request_type){
         return false;
     } else {
         return true;
+    }
+}
+function hasCtrlFile($render_file){
+    $ctrl_file = str_replace(ABSPATH, ROOTPATH , str_replace("pages/", '', str_replace('/index', '', str_replace('.php', '.ctrl.js',$render_file)))) ;
+    $ctrl_file_path = ABSPATH . 'scripts' . $ctrl_file;
+    if (file_exists($ctrl_file_path)){
+        echo '<!--' . $ctrl_file . '-->';
+        return $ctrl_file;
+    } else {
+        return false;
     }
 }
 

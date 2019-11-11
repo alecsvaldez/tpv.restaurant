@@ -1,4 +1,6 @@
 var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
+    let id_usuario = IdUsuario
+
     $scope.comandas = []
     $scope.categorias = []
     $scope.productos = []
@@ -6,7 +8,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
     $scope.comanda = {
         nombre: 'comanda',
         productos: [],
-        id_usuario: IdUsuario, 
+        id_usuario: id_usuario, 
         activa: true
     }
     $scope.categoria = {}
@@ -20,20 +22,20 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
         $scope.comanda = {
             nombre: 'comanda',
             productos: [],
-            id_usuario: IdUsuario,
+            id_usuario: id_usuario,
             activa: true
         }  
         if (apply)
             $scope.$apply()
     }
     $scope.getComandas = () => {
-        $http.get('/ajax/tpv/comandas')
+        $http.get(AJAX + 'tpv/comandas')
             .then(function (response) {
                 $scope.comandas = response.data;
             });
     }
     $scope.getCategorias = () => {
-        $http.get('/ajax/tpv/categorias')
+        $http.get(AJAX + 'tpv/categorias')
             .then(function (response) {
                 $scope.categorias = response.data;
                 var productos = []
@@ -68,7 +70,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
         $scope.comanda.activa = true
 
         //vamos por info adicional de la comanda
-        fetch('/ajax/tpv/comanda/' + $scope.comanda.id_registro)
+        fetch(AJAX + 'tpv/comanda/' + $scope.comanda.id_registro)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(response.statusText)
@@ -300,7 +302,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
             if (result.value) {
                 $.ajax({
                     method: 'POST',
-                    url: '/ajax/tpv/cancelar-comanda',
+                    url: AJAX + 'tpv/cancelar-comanda',
                     data: angular.toJson($scope.comanda),
                     dataType: 'json',
                     async: false,
@@ -326,7 +328,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
     $scope.generarCuenta = () => {
         $.ajax({
             method: 'POST',
-            url: '/ajax/tpv/cerrar-comanda',
+            url: AJAX + 'tpv/cerrar-comanda',
             data: angular.toJson($scope.comanda),
             dataType: 'json',
             async: false,
@@ -375,7 +377,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
 
         $.ajax({
             method: 'POST',
-            url: '/ajax/tpv/comanda',
+            url: AJAX + 'tpv/comanda',
             data: angular.toJson($scope.comanda),
             dataType: 'json',
             async: false,
@@ -401,7 +403,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
                 // comandas.unshift({
                 //     nombre: 'C-0',
                 //     comanda: 'C-0',
-                //     id_usuario: IdUsuario, 
+                //     id_usuario: id_usuario,
                 //     productos: [],
                 //     activa: true
                 // })
@@ -418,7 +420,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
     
     function validatePin() {
         var pin = $('.input-pin').val()
-        return fetch('/ajax/tpv/pin/' + pin)
+        return fetch(AJAX + 'tpv/pin/' + pin)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(response.statusText)
@@ -431,7 +433,7 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
                 }
                 var kb = $('.input-pin').getkeyboard();
                 kb.close()
-                IdUsuario = json.id_usuario
+                id_usuario = json.id_usuario
                 if ($scope.comanda) {
                     $scope.comanda.id_usuario = json.id_usuario
                 }
