@@ -56,9 +56,10 @@ $total = 0;
 $efectivo = 0;
 $tarjeta = 0;
 $servicio = 0;
-
-$balance_inicial = $db->first("SELECT BalanceFin FROM tb_cortes_caja ORDER BY id DESC LIMIT 1");
-$balance_inicial = $balance_inicial['BalanceFin'];
+$gastos = 0;
+$retiro = 0;
+$balance_inicial = $db->first("SELECT Fondo FROM tb_cortes_caja ORDER BY id DESC LIMIT 1");
+$balance_inicial = $balance_inicial['Fondo'];
 if(is_null($balance_inicial )){
     $balance_inicial = 0;
 }
@@ -195,45 +196,75 @@ if(is_null($balance_inicial )){
                     <div class="box-body">
                         <p class="text-strong"><b>Balance</b></p>
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-xs-4 col-sm-3 col-lg-2">
                                 <label>Balance Inicial</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
                                     <input type="text" class="form-control" readonly value="<?php echo $balance_inicial; ?>" id="balance-inicial" name="balance_inicial">
                                 </div>
                             </div>
-                            <div class="col-sm-3">
-                                <label>Efectivo Ingreso</label>
+                            <div class="col-xs-4 col-sm-3 col-lg-2">
+                                <label>Total Venta</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
-                                    <input type="text" class="form-control numeric" value="<?php echo round($efectivo - $servicio, 2) ?>" onkeyup="calculaBalance()" id="efectivo-ingreso" name="efectivo-ingreso">
+                                    <input type="text" class="form-control numeric" value="<?php echo round($efectivo, 2) ?>" onkeyup="calculaBalance()" id="efectivo-ingreso" name="efectivo-ingreso" readonly>
                                 </div>
-                                <p class="help-block">Calculado: <?php echo getMoney($efectivo - $servicio) ?> (sin servicio)</p>
+                                <p class="help-block"></p>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-xs-4 col-sm-3 col-lg-2">
+                                <label>Gastos</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control numeric" value="<?php echo $gastos ?>" onkeyup="calculaBalance()" id="gastos" name="gastos">
+                                </div>
+                                <p class="help-block">&nbsp;</p>
+
+                                <label>Servicio</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control numeric" value="<?php echo round($servicio, 2) ?>" onkeyup="calculaBalance()" id="servicio" name="servicio">
+                                </div>
+                                <p class="help-block">10% Venta = <?php echo getMoney($servicio) ?></p>
+                            </div>
+                            <div class="col-xs-4 col-sm-3 col-lg-2">
                                 <label>Balance Final</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
-                                    <input type="text" class="form-control numeric" id="balance-final" onkeyup="calculaBalance()" name="balance_final">
+                                    <input type="text" class="form-control numeric" id="balance-final" onkeyup="calculaFaltante()" name="balance_final" value="">
                                 </div>
-                                <p class="help-block">Existente real en caja</p>
-                            </div>
-                            <div class="col-sm-3">
+                                <p class="help-block">Calculado: $<span id="balance-final-calculado">$</span></p>
+
                                 <label>Faltante</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
-                                    <input type="text" class="form-control" readonly id="faltante" name="faltante">
+                                    <input type="text" class="form-control" readonly id="faltante" name="faltante" tabindex="-1">
                                     <span id="faltante-ok" class="input-group-addon bg-success" style="display:none"><i class="fa fa-check"></i></span>
                                     <span id="faltante-not" class="input-group-addon bg-danger" style="display:none"><i class="fa fa-times"></i></span>
                                 </div>
                                 <p class="help-block">Si es $0 o menos, está ok</p>
+
+                            </div>
+                            <div class="col-xs-4 col-sm-3 col-lg-2">
+                                <label>Retiro</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control numeric" id="retiro" name="retiro" onkeyup="calculaFondo()"  value="<?php echo $retiro ?>">
+                                </div>
+                                <p class="help-block">Efectivo retirado de caja</p>
+                            </div>
+                            <div class="col-xs-4 col-sm-3 col-lg-2">
+                                <label>Fondo</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control" readonly id="fondo" name="fondo">
+                                </div>
+                                <p class="help-block">Disponible día siguiente</p>
                             </div>
                         </div>
                     </div>
                     <input type="hidden" name="efectivo" value="<?php echo $efectivo ?>">
                     <input type="hidden" name="tarjeta" value="<?php echo $tarjeta ?>">
-                    <input type="hidden" name="servicio" value="<?php echo $servicio ?>">
-                    <input type="hidden" name="gastos" value="0">
+                    
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" name="submit" value="submit" class="btn btn-primary">Guardar</button>
@@ -271,19 +302,32 @@ if(is_null($balance_inicial )){
             }
         })
 
-
+        calculaBalance()
+        $('#balance-final').focus()
     })
 
     function calculaBalance() {
-        console.log('Calculando...')
+        
         var balance_inicial = $('#balance-inicial').val()
         var efectivo = $('#efectivo-ingreso').val()
-        var balance_final = $('#balance-final').val()
+        var servicio = $('#servicio').val()
+        var gastos = $('#gastos').val()
+        var balance_final = parseFloat(balance_inicial) + parseFloat(efectivo) - parseFloat(servicio) - parseFloat(gastos)
+        
         var faltante = 0
-
-        var caja = parseFloat(balance_inicial || 0) + parseFloat(efectivo)
-        var faltante = caja - balance_final
-
+        
+        
+        
+        $('#balance-final').val(balance_final.toFixed(2))
+        $('#balance-final-calculado').html(balance_final.toFixed(2))
+        
+        calculaFaltante()
+        calculaFondo()
+    }
+    function calculaFaltante() {
+        
+        var faltante = $('#balance-final-calculado').html() - $('#balance-final').val()
+        
         $('#faltante').val(faltante.toFixed(2))
         if (faltante <= 0) {
             $('#faltante-ok').show()
@@ -292,6 +336,11 @@ if(is_null($balance_inicial )){
             $('#faltante-ok').hide()
             $('#faltante-not').show()
         }
+    }
+    function calculaFondo() {
+        var balance_final = $('#balance-final').val()
+        var retiro = $('#retiro').val()
+        $('#fondo').val( (balance_final - retiro).toFixed(2) )
     }
 </script>
 <style>

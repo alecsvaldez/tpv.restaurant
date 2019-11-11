@@ -25,7 +25,7 @@ switch($accion){
             $response = array ('id_usuario' => 0, 'message' => 'Pin Incorrecto.');
         }
         echo json_encode($response);
-        exit;        
+        exit;
     break;
     case 'comanda': 
         $table = 'tb_comandas';
@@ -215,8 +215,9 @@ switch($accion){
                     , Producto AS nombre
                     , p.IdCategoria AS id_categoria
                     , Categoria AS categoria
-                    , Precio AS precio
-                    , Costo AS costo
+                    , m.Precio AS precio_menu
+                    , p.PrecioBase AS precio
+                    , p.CostoBase AS costo
                 FROM tb_productos p
                     INNER JOIN tb_cat_productos c ON c.id = p.IdCategoria
                     INNER JOIN tb_menus_productos m ON m.IdProducto = p.id
@@ -261,6 +262,9 @@ switch($accion){
         $id_registro = isset($data['id_registro'] ) ? $data['id_registro']  : 0;
         $comanda = array(
             'OrdenCerrada' => 1,
+            'SubtotalReal' => $data['subtotal_real'],
+            'Subtotal' => $data['subtotal'],
+            'Total' => $data['total'],
             'IdUsuarioCierra' => $_SESSION['id'],
             'FechaCierra' => date('Y-m-d H:i:s')
         );

@@ -46,9 +46,8 @@ showSessionMessage();
                             <tr>
                                 <th style="width: 1%">SN</th>
                                 <th>Ingrediente</th>
-                                <th>Descripción</th>
                                 <th>Categoría</th>
-                                <th>Medida</th>
+                                <th>Medidas</th>
                                 <th>Agregado por</th>
                                 <th style="width: 7%;text-align: center">Acciones</th>
                             </tr>
@@ -60,9 +59,13 @@ showSessionMessage();
                             <tr>
                                 <td><?php echo $d['id'] ?></td>
                                 <td><?php echo $d['nombre'] ?></td>
-                                <td><?php echo $d['descripcion'] ?></td>
                                 <td><?php echo $categorias_indexed[ $d['id_categoria'] ]?></td>
-                                <td><?php echo $tipos_medida_indexed[ $d['id_unidad'] ]?></td>
+                                <td>
+                                    Base: <?php echo $tipos_medida_indexed[ $d['id_unidad'] ]?>
+                                    Entrada/Salida<br> 
+                                    1x<?php echo $tipos_medida_indexed[ $d['id_unidad_entrada'] ]?> = 
+                                    <?php echo $d['factor_conversion'] . ' ' . $tipos_medida_indexed[ $d['id_unidad_salida'] ]?>
+                                </td>
                                 <td></td>
                                 <td class="text-center">
                                     <div class="btn-group">
@@ -84,7 +87,6 @@ showSessionMessage();
                             <tr>
                                 <th style="width: 1%">SN</th>
                                 <th>Ingrediente</th>
-                                <th>Descripción</th>
                                 <th>Categoría</th>
                                 <th>Medida</th>
                                 <th>Agregado por</th>

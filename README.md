@@ -21,3 +21,7 @@ Administrador y Punto de venta (WorkInProgress) para restaurantes, cafeterías, 
 - Notificaciones en pantalla TPV sobre estado de preparación
 
 Y un laaaargo etcétera...
+
+# Configuraciones adicionales
+Activar  módulo de Headers en servidor (apache)
+LoadModule headers_module modules/mod_headers.so

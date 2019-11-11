@@ -65,9 +65,9 @@ unset($_SESSION['db_message']);
                                 </div>
                                 <div class="col-xs-12 ">
                                     <div class="row bg-primary m-0 pt-5 pb-5">
-                                        <div class="col-xs-7">Ingrediente</div>
-                                        <div class="col-xs-2">Cantidad</div>
-                                        <div class="col-xs-2">Unidad</div>
+                                        <div class="col-xs-5">Ingrediente</div>
+                                        <div class="col-xs-3">Cantidad</div>
+                                        <div class="col-xs-3">Unidad</div>
                                         <div class="col-xs-1"></div>
                                     </div>
                                 </div>
@@ -76,17 +76,17 @@ unset($_SESSION['db_message']);
                                 foreach($item['ingredientes'] as $i){
                                     ?>
                                     <div class="row row-ingrediente m-0">
-                                        <input type="hidden" name="ingrediente[<?php echo $i['id']?>][id_registro]" value="<?php echo $i['id']?>">
-                                        <div class="col-xs-7">
+                                        <input type="hidden" class="input-id-registro" name="ingrediente[<?php echo $i['id']?>][id_registro]" value="<?php echo $i['id']?>">
+                                        <div class="col-xs-5">
                                             <?php echo $ingredientes_indexed[$i['id_ingrediente']]?><br>
                                             <small class="text-muted"></small>
                                         </div>
-                                        <div class="col-xs-2"><input type="text" class="form-control" name="ingrediente[<?php echo $i['id']?>][cantidad]" value="<?php echo $i['cantidad']?>"></div>
-                                        <div class="col-xs-2"><input type="hidden" name="ingrediente[<?php echo $i['id']?>][unidad]" value="<?php echo $i['id_unidad']?>">
+                                        <div class="col-xs-3"><input type="text" class="form-control" name="ingrediente[<?php echo $i['id']?>][cantidad]" value="<?php echo $i['cantidad']?>"></div>
+                                        <div class="col-xs-3"><input type="hidden" name="ingrediente[<?php echo $i['id']?>][unidad]" value="<?php echo $i['id_unidad']?>">
                                             <?php echo $unidades_indexed[$i['id_unidad']]?>
                                         </div>
                                         <div class="col-xs-1">
-                                            <a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter();"><i class="fa fa-trash"></i> </a>
+                                            <a class="btn btn-danger btn-xs delete-ingrediente" style="margin-left: 5px; margin-top: 10px;"><i class="fa fa-trash"></i> </a>
                                         </div>
                                     </div>
                                     <?php
@@ -127,9 +127,9 @@ jQuery(document).ready(function(){
                     if (response){
                         var div = $('<div class="row row-ingrediente m-0">' + 
                             '<input type="hidden" name="ingrediente[' + response.id + '][id_registro]" value="0">' +
-                            '<div class="col-xs-7">' + response.nombre + '<br><small class="text-muted">' + response.categoria + '</small></div>' +
-                            '<div class="col-xs-2"><input type="text" class="form-control" name="ingrediente[' + response.id + '][cantidad]"/></div>' +
-                            '<div class="col-xs-2"><input type="hidden" name="ingrediente[' + response.id + '][unidad]" value="' + response.id_unidad + '">' + response.unidad + '</div>' +
+                            '<div class="col-xs-5">' + response.nombre + '<br><small class="text-muted">' + response.categoria + '</small></div>' +
+                            '<div class="col-xs-3"><input type="text" class="form-control" name="ingrediente[' + response.id + '][cantidad]"/></div>' +
+                            '<div class="col-xs-3"><input type="hidden" name="ingrediente[' + response.id + '][unidad]" value="' + response.id_unidad + '">' + response.unidad + '</div>' +
                             '<div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter();"><i class="fa fa-trash"></i> </a></div>' +
                         '</div>');
                         list.append(div)
@@ -139,7 +139,25 @@ jQuery(document).ready(function(){
                 }
             })            
         }
-
+    })
+    $(document).on('click', '.delete-ingrediente', function(){
+        let $fila = $(this).closest('.row-ingrediente')
+        let id_registro = $fila.find('.input-id-registro').val()
+        console.log(id_registro)
+        if (id_registro > 0){
+            // peticion ajax para borrar
+            var url = '/ajax/productos/borrar-preparacion/' + id_registro
+            $.ajax({
+                method: 'POST',
+                url: url,
+                success: function(response){
+                    $fila.remove()
+                }
+            })      
+            
+        } else {
+            $fila.remove()
+        }
     })
 })
 </script>

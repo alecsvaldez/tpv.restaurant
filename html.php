@@ -68,9 +68,11 @@ namespace TPV;
     </script>
     <!-- Si hay archivo para la sección , lo cargamos -->
     <?php
-    if (file_exists(ROOTPATH . 'scripts/' . $_GET['page'] . '.ctrl.js')) {
-        ?>
-        <script src="<?php echo $site_scripts . $_GET['page']; ?>.ctrl.js"></script>
+    $ctrl_file = str_replace('./pages/', '', str_replace('/index', '', str_replace('.php', '',$render_page)));
+    echo '<!--' . $ctrl_file . '-->
+    ';
+    if (file_exists(ROOTPATH . 'scripts/' . $ctrl_file . '.ctrl.js')) { ?>
+        <script src="<?php echo $site_scripts . $ctrl_file ?>.ctrl.js"></script>
         <script src="<?php echo $site_scripts ?>angular.directives.js"></script>
     <?php
     }

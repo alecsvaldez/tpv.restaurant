@@ -10,7 +10,10 @@ $data = array(
     'Ingrediente' => $_POST['nombre'],
     'Descripcion' => $_POST['descripcion'],
     'IdCategoria' => $_POST['id_categoria'],
-    'IdUnidad' => $_POST['id_unidad']
+    'IdUnidad' => $_POST['id_unidad'],
+    'IdUnidadEntrada' => $_POST['id_unidad_entrada'],
+    'FactorConversion' => $_POST['factor_conversion'],
+    'IdUnidadSalida' => $_POST['id_unidad_salida']
 );
 
 if ($id > 0){

@@ -10,11 +10,15 @@ switch($accion){
             i.id
             , i.Ingrediente AS nombre
             , ci.Categoria AS categoria
-            , u.id AS id_unidad
-            , u.Abreviacion AS unidad
+            -- , ue.id AS id_unidad_entrada
+            , ue.Abreviacion AS unidad_entrada
+            , i.FactorConversion AS conversion
+            -- , us.id AS id_unidad_salida
+            , us.Abreviacion AS unidad_salida
         FROM tb_ingredientes i
             INNER JOIN tb_cat_ingredientes ci ON  ci.id = i.IdCategoria
-            INNER JOIN tb_unidades u ON u.id = i.IdUnidad
+            INNER JOIN tb_unidades ue ON ue.id = i.IdUnidadEntrada
+            INNER JOIN tb_unidades us ON us.id = i.IdUnidadSalida
         WHERE i.Estatus = 1 
         AND i.id = :id ", array('id' => $id ));
     break;

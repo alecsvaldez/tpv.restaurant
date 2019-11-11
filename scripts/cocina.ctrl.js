@@ -1,4 +1,4 @@
-var app = angular.module('app', ['angularMoment']).controller('cocina', function ($scope, $http) { 
+var app = angular.module('app', []).controller('cocina', function ($scope, $http) { 
     $scope.getComandas = () => {
         $http.get('/ajax/cocina/comandas')
             .then(function (response) {
