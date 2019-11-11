@@ -47,7 +47,8 @@ if ($id > 0){
         'id_unidad' => 'IdUnidad',
         'cantidad' => 'Cantidad',
     ), array(
-        'IdPreparacion = ' . $id
+        'IdPreparacion = ' . $id,
+        'Estatus = 1'
     ));
     
 

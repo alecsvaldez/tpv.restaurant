@@ -42,15 +42,6 @@ if ($id > 0){
                                 <?php
                             }?>
                         </div>
-                        <div class="col-md-9">
-                            <div class="form-group">
-                                <label>Descripción</label>
-                                <input tabindex="2" type="text" name="descripcion" class="form-control" placeholder="Descripción" 
-                                value="<?php echo $item['descripcion']?>">
-                            </div>
-                        </div> 
-                    </div>
-                    <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Categoría</label>
@@ -64,9 +55,18 @@ if ($id > 0){
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <input tabindex="2" type="text" name="descripcion" class="form-control" placeholder="Descripción" 
+                                value="<?php echo $item['descripcion']?>">
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Unidad de Medida</label>
+                                <label>Unidad de Medida Base</label>
                                 <select tabindex="2" class="form-control select2" name="id_unidad" style="width: 100%;">
                                     <option value="">Selecciona uno</option>
                                     <?php
@@ -77,6 +77,39 @@ if ($id > 0){
                                 </select>
                             </div>
                         </div>                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Unidad de Entrada</label>
+                                <select tabindex="2" class="form-control select2" name="id_unidad_entrada" style="width: 100%;">
+                                    <option value="">Selecciona uno</option>
+                                    <?php
+                                    foreach($tipos_medida as $r){
+                                        echo '<option value="' . $r['id'] . '" ' . ($r['id'] == $item['id_unidad_entrada'] ? 'selected' : '') . ' >' . $r['nombre'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Factor Conversión</label>
+                                <input type="text" name="factor_conversion" class="form-control" placeholder="Factor Conversión" 
+                                value="<?php echo $item['factor_conversion']?>">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Unidad de Medida Salida</label>
+                                <select tabindex="2" class="form-control select2" name="id_unidad_salida" style="width: 100%;">
+                                    <option value="">Selecciona uno</option>
+                                    <?php
+                                    foreach($tipos_medida as $r){
+                                        echo '<option value="' . $r['id'] . '" ' . ($r['id'] == $item['id_unidad_salida'] ? 'selected' : '') . ' >' . $r['nombre'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>                          
                     </div>
                 </div>
                 <!-- /.box-body -->

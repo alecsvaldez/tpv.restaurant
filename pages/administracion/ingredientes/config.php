@@ -11,6 +11,9 @@ $columns_list = array(
     'nombre' => 'Ingrediente',
     'id_categoria' => 'IdCategoria',
     'id_unidad' => 'IdUnidad',
+    'id_unidad_entrada' => 'IdUnidadEntrada',
+    'factor_conversion' => 'FactorConversion',
+    'id_unidad_salida' => 'IdUnidadSalida',
     'descripcion' => 'Descripcion'
 );
 $conditions_list = array(
@@ -28,6 +31,9 @@ $columns_item = array(
     'nombre' => 'Ingrediente',
     'id_categoria' => 'IdCategoria',
     'id_unidad' => 'IdUnidad',
+    'id_unidad_entrada' => 'IdUnidadEntrada',
+    'id_unidad_salida' => 'IdUnidadSalida',
+    'factor_conversion' => 'FactorConversion',
     'descripcion' => 'Descripcion'
 );
 
