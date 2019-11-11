@@ -3,7 +3,7 @@
 # Activar RewriteEngine
 RewriteEngine on
 
-RewriteBase /
+# RewriteBase / # asume que estamos en root. no necesario si la pagina esta en subdirectorio
 
 
 #RewriteCond %{REQUEST_FILENAME} !-f
@@ -11,16 +11,16 @@ RewriteBase /
 #RewriteRule ^(.*)$ $1.html
 
 # usuarios
-RewriteRule ^perfil(\.html)?$                               index.php?action=perfil [L]
-RewriteRule ^perfil/(.*)?(\.html)?$                         index.php?action=perfil&usuario=$1 [L]
+RewriteRule ^perfil(\.html)?$                               ./index.php?action=perfil [L]
+RewriteRule ^perfil/(.*)?(\.html)?$                         ./index.php?action=perfil&usuario=$1 [L]
 
 # Acciones con valores POST
-RewriteRule ^action/(.*)$                                   index.php?action=$1 [L]
+RewriteRule ^action/(.*)$                                   ./index.php?action=$1 [L]
 
 # accion = logout
-RewriteRule ^(logout)(\.html)?$                             index.php?action=$1 [L] 
+RewriteRule ^(logout)(\.html)?$                             ./index.php?action=$1 [L] 
 # Paginas generales (login, home, etc)
-RewriteRule ^(\w*-*?\w*)(\.html)?/?$                        index.php?page=$1 [L]
+RewriteRule ^(\w*-*?\w*)(\.html)?/?$                        ./index.php?page=$1 [L]
 
 RewriteRule ^ajax/(\w*-*?\w*)/(\d+)(\.html)?/?$             inc/ajax.php?accion=$1&id=$2 [QSA,L]
 
@@ -33,19 +33,9 @@ RewriteRule ^ajax/(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$                     
 # RewriteRule ^ajax/(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$  inc/ajax.php?seccion=$1&subseccion=$2&accion=$3&page=$4&id=$5 [QSA,L]
 
 # Paginas dentro de una seccion (p.e. administracion)
-RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)(\.html)?/?$                                index.php?seccion=$1&page=$2 [QSA,L]
-RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$                          index.php?seccion=$1&page=$2&id=$3 [QSA,L]
-RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)(\.html)?/?$                    index.php?seccion=$1&accion=$2&page=$3 [QSA,L]
-RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$              index.php?seccion=$1&accion=$2&page=$3&id=$4 [QSA,L]
-RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)(\.html)?/?$        index.php?seccion=$1&subseccion=$2&accion=$3&page=$4 [QSA,L]
-RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$  index.php?seccion=$1&subseccion=$2&accion=$3&page=$4&id=$5 [QSA,L]
-
-
-
-#############
-
-RewriteRule ^app/(.*)/((guarda|accion).*\.php)$ /2/mod_$1/$2%{QUERY_STRING} [L]
-RewriteRule ^app/(.*)/(.*(\.php))$              /2/index.php?Seccion=$1&ver=$2 [QSA,L]
-RewriteRule ^app/(.*)/$                         /2/index.php?Seccion=$1 [QSA,L]
-RewriteRule ^app/?$                             /2/index.php?Seccion=sistemas_web [L]
-
+RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)(\.html)?/?$                                ./index.php?seccion=$1&page=$2 [QSA,L]
+RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$                          ./index.php?seccion=$1&page=$2&id=$3 [QSA,L]
+RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)(\.html)?/?$                    ./index.php?seccion=$1&accion=$2&page=$3 [QSA,L]
+RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$              ./index.php?seccion=$1&accion=$2&page=$3&id=$4 [QSA,L]
+RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)(\.html)?/?$        ./index.php?seccion=$1&subseccion=$2&accion=$3&page=$4 [QSA,L]
+RewriteRule ^(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\w*-*?\w*)/(\d+)(\.html)?/?$  ./index.php?seccion=$1&subseccion=$2&accion=$3&page=$4&id=$5 [QSA,L]

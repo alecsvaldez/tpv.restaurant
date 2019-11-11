@@ -3,9 +3,8 @@ namespace TPV;
 
 defined('_PUBLIC_ACCESS') or die();
 
-
-if (file_exists( $_SERVER['DOCUMENT_ROOT'] . '/inc/config.php' )){
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/config.php';
+if (file_exists( $_SERVER['DOCUMENT_ROOT'] . '/config.php' )){
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 } else {
     echo '<h3><b>config.php</b> no existe.</h3>';
     exit;
