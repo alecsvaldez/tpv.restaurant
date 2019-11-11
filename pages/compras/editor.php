@@ -78,7 +78,7 @@ unset($_SESSION['db_message']);
                         </div> -->
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>Ingrediente</label>
+                                <label>Productos</label>
                                 <div class="input-group">
                                     <select tabindex="5" id="select-productos" class="form-control select2 select-item" data-url="ingredientes/detalle/" style="width:100%">
                                         <option value="">Selecciona uno</option>
@@ -89,14 +89,14 @@ unset($_SESSION['db_message']);
                                     ?>
                                     </select>
                                     <span class="input-group-btn" >
-                                        <button type="button" class="btn btn-primary btn-add"><i class="fa fa-plus"></i></button>
+                                        <button type="button" class="btn btn-primary" ng-click="addProduct()"><i class="fa fa-plus"></i></button>
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row text-center bg-primary m-0 pt-5 pb-5">
-                        <div class="col-xs-5">Ingrediente</div>
+                        <div class="col-xs-5">Producto</div>
                         <div class="col-xs-2">Precio 1X</div>
                         <div class="col-xs-2">Cantidad</div>
                         <div class="col-xs-2">Precio Total</div>
@@ -106,8 +106,8 @@ unset($_SESSION['db_message']);
                         <div class="row row-ingrediente m-0" ng-repeat="p in item.items">
                             <input type="hidden" name="items[{{p.id_registro}}][id_registro]" value="" ng-model="p.id_registro">
                             <input type="hidden" name="items[{{p.id_registro}}][id_item]" value="" ng-model="p.id_item">
-                            <input type="hidden" name="items[{{p.id_registro}}][id_unidad_original]" value="" ng-value="p.id_unidad_original">
-                            <input type="hidden" name="items[{{p.id_registro}}][id_unidad]" value="" ng-value="p.id_unidad">
+                            <input type="hidden" name="items[{{p.id_registro}}][id_unidad_entrada]" value="" ng-value="p.id_unidad_entrada">
+                            <input type="hidden" name="items[{{p.id_registro}}][id_unidad_salida]" value="" ng-value="p.id_unidad_salida">
                             <div class="col-xs-5">{{p.item}}<br><small class="text-muted"></small></div>
                             <div class="col-xs-2">
                                 <div class="input-group">

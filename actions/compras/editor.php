@@ -57,7 +57,7 @@ if ($id > 0 && isset($_POST['items']) &&  count($_POST['items']) > 0 ){
 
 if ($id !== false){
     sessionMessage('success', 'Los datos se han guardado.');
-    header('Location: /compras');
+    header('Location: ' . $site_url . '/compras');
 } else {
     $error = $db->executeError();
     sessionMessage('error', $error['db_message'], 'Ocurrió un error al registrar la información');

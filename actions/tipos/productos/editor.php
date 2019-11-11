@@ -19,7 +19,7 @@ if ($id > 0){
 
 if ($id !== false){
     sessionMessage('success', 'Los datos se han guardado.');
-    header('Location: /administracion/tipos/productos');
+    header('Location: ' . $site_url . '/administracion/tipos/productos');
 } else {
     $error = $db->executeError();
     sessionMessage('error', $error['db_message'], 'Ocurrió un error al registrar la información');

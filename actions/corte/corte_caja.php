@@ -44,7 +44,7 @@ if ($id !== false) {
     $db->updateById('tb_comandas', array('IdCorteCaja' => $id), 'id', $ids_comandas);
 
     sessionMessage('success', 'Los datos se han guardado.');
-    header('Location: /corte');
+    header('Location: ' . $site_url . '/corte');
 } else {
     $error = $db->executeError();
     sessionMessage('error', $error['db_message'], 'Ocurrió un error al registrar la información');

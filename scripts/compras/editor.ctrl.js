@@ -1,30 +1,94 @@
 var app = angular.module('app', []).controller('compras_editor', function ($scope, $http) {
     
     $scope.getItem = () => {
-        $http.get( AJAX + 'compras/detalle/' + id)
-            .then(function (response) {
-                $scope.item = response.data;
-                $scope.item.serial_id = ('00000' + $scope.item.id).slice(-5)
-                $scope.item.id_proveedor = '' + $scope.item.id_proveedor
-
-                console.log($scope.item)
-                let select = $('select[name="id_proveedor"]')
-                select.val($scope.item.id_proveedor);
-                setTimeout(() => {                    select.trigger('change');
-                }, 1)
-            });
+        if (id > 0) {
+            $http.get( AJAX + 'compras/detalle/' + id)
+                .then(function (response) {
+                    $scope.item = response.data;
+                    $scope.item.serial_id = ('00000' + $scope.item.id).slice(-5)
+                    $scope.item.id_proveedor = '' + $scope.item.id_proveedor
+    
+                    console.log($scope.item)
+                    let select = $('select[name="id_proveedor"]')
+                    select.val($scope.item.id_proveedor);
+                    setTimeout(() => {                    select.trigger('change');
+                    }, 1)
+                });
+        } else {
+            $scope.item = {
+                serial_id: 0,
+                id_proveedor: 0,
+                items: [],
+            }
+        }
     }
     $scope.getItem()
 
     $scope.ingredientes = []
+    // Convertimos ingredientes de select (php) a array (JS)
     $('#select-productos option').each((i, v) => { 
         if ($(v).val() > 0) {
             $scope.ingredientes.push({
                 id: $(v).val(),
                 ingrediente: $(v).text() 
-            })    
+            })
         }
     })
+
+    $scope.addProduct = () => {
+        console.log()
+        var select = $('#select-productos')
+        if (select.val() > 0) {
+            // Si hay una opcion seleccionada, vamos por el registro
+            var url = AJAX + select.attr('data-url') + select.val()
+            select.val(null).trigger('change')
+            $.ajax({
+                method: 'GET',
+                url: url,
+                success: function (response) {
+                    categoria: "Carnes"
+                    conversion: "8.00"
+                    id: 1
+                    nombre: "Carne para hamburguesa"
+                    unidad_entrada: "Pq"
+                    unidad_salida: "pz"
+                    $scope.item.items.push({
+                        id_registro: 0,
+                        id_item: response.id,
+                        nombre: response.nombre,
+                        id_categoria: response.id_categoria,
+                        categoria: response.categoria,
+                        id_unidad_original: 0,
+                        id_unidad_entrada: response.id_unidad_entrada,
+                        unidad_entrada: response.unidad_entrada,
+                        id_unidad_salida: response.id_unidad_salida,
+                        unidad_salida: response.unidad_salida,
+                        conversion: response.conversion,
+                    })
+
+                    // var list = $('#lista-compras'), index = Math.random() * -1
+                    // if (response) {
+                    //     var div = $('<div class="row row-ingrediente m-0">' +
+                    //         '<input type="hidden" name="items[' + index + '][id_registro]" value="0">' +
+                    //         '<input type="hidden" name="items[' + index + '][id_item]" value="' + response.id + '">' +
+                    //         '<input type="hidden" name="items[' + index + '][id_unidad_original]" value="' + response.id_unidad + '">' +
+                    //         '<input type="hidden" name="items[' + index + '][id_unidad]" value="' + response.id_unidad + '">' +
+                    //         '<div class="col-xs-5">' + response.nombre + '<br><small class="text-muted">' + response.categoria + '</small></div>' +
+                    //         '<div class="col-xs-2"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control precio" name="items[' + index + '][precio]"/><span class="input-group-addon">x 1' + response.unidad_entrada + '</span></div></div>' +
+                    //         '<div class="col-xs-2"><div class="input-group"><input type="text" class="form-control cantidad" name="items[' + index + '][cantidad]"/><span class="input-group-addon">' + response.unidad_entrada + '</span></div>' +
+                    //         '<span class="text-small">[ ' + (1 * parseFloat(response.conversion)) + ' ' + response.unidad_salida + ']</span>'+
+                    //         '</div>' +
+                    //         '<div class="col-xs-2"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control total" name="items[' + index + '][total]"/></div></div>' +
+                    //         '<div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter();"><i class="fa fa-trash"></i> </a></div>' +
+                    //         '</div>');
+                    //     list.append(div)
+                    // } else {
+
+                    // }
+                }
+            })
+        }
+    }
 
 })
 /*
