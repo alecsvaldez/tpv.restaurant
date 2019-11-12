@@ -30,7 +30,7 @@ if ($id > 0){
 
 if ($id !== false){
     sessionMessage('success', 'Los datos se han guardado.');
-    header('Location: ' . $site_url . '/administracion/proveedores');
+    header('Location: ' . $site_url . 'administracion/proveedores');
 } else {
     $error = $db->executeError();
     sessionMessage('error', $error['db_message'], 'Ocurrió un error al registrar la información');

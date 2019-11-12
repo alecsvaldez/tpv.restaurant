@@ -54,7 +54,7 @@ if ($id !== false){
     move_uploaded_file($_FILES["foto"]["tmp_name"],  $target_file);
 
     sessionMessage('success', 'Los datos se han guardado.');
-    header('Location: ' . $site_url . '/administracion/productos');
+    header('Location: ' . $site_url . 'administracion/productos');
 } else {
     $error = $db->executeError();
     sessionMessage('error', $error['db_message'], 'Ocurrió un error al registrar la información');

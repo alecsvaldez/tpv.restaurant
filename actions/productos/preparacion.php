@@ -44,7 +44,7 @@ if ($id > 0 && isset($_POST['ingrediente']) &&  count($_POST['ingrediente']) > 0
 
 if ($id !== false){
     sessionMessage('success', 'Los datos se han guardado.');
-    header('Location: ' . $site_url . '/administracion/productos');
+    header('Location: ' . $site_url . 'administracion/productos');
 } else {
     $error = $db->executeError();
     sessionMessage('error', $error['db_message'], 'Ocurrió un error al registrar la información');

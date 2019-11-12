@@ -24,7 +24,7 @@ if ($id > 0){
 
 if ($id !== false){
     sessionMessage('success', 'Los datos se han guardado.');
-    header('Location: ' . $site_url . '/administracion/menus');
+    header('Location: ' . $site_url . 'administracion/menus');
 } else {
     $error = $db->executeError();
     sessionMessage('error', $error['db_message'], 'Ocurrió un error al registrar la información');

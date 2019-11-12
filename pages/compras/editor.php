@@ -97,37 +97,36 @@ unset($_SESSION['db_message']);
                     </div>
                     <div class="row text-center bg-primary m-0 pt-5 pb-5">
                         <div class="col-xs-5">Producto</div>
-                        <div class="col-xs-2">Precio 1X</div>
+                        <div class="col-xs-2">Precio x1</div>
                         <div class="col-xs-2">Cantidad</div>
                         <div class="col-xs-2">Precio Total</div>
                         <div class="col-xs-1"></div>
                     </div>
+                    <input type="text" ng-model="item.items" name="items">
                     <div class="row m-0" id="lista-compras">
                         <div class="row row-ingrediente m-0" ng-repeat="p in item.items">
-                            <input type="hidden" name="items[{{p.id_registro}}][id_registro]" value="" ng-model="p.id_registro">
-                            <input type="hidden" name="items[{{p.id_registro}}][id_item]" value="" ng-model="p.id_item">
-                            <input type="hidden" name="items[{{p.id_registro}}][id_unidad_entrada]" value="" ng-value="p.id_unidad_entrada">
-                            <input type="hidden" name="items[{{p.id_registro}}][id_unidad_salida]" value="" ng-value="p.id_unidad_salida">
-                            <div class="col-xs-5">{{p.item}}<br><small class="text-muted"></small></div>
+                            <div class="col-xs-5">{{p.item}}<br><small class="text-muted">{{p.categoria}}</small></div>
                             <div class="col-xs-2">
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
-                                    <input type="text" class="form-control precio" name="items[{{p.id_registro}}][precio]" value="" ng-model="p.precio"/>
+                                    <input type="text" class="form-control precio" ng-model="p.precio" ng-change="calculate(p)"/>
                                 </div>
+                                <small>1{{p.unidad_entrada}} = {{ (p.conversion) }} {{p.unidad_salida}}</small>
                             </div>
                             <div class="col-xs-2">
                                 <div class="input-group">
-                                    <input type="text" class="form-control cantidad" name="items[{{p.id_registro}}][cantidad]" value="" ng-model="p.cantidad"/>
-                                    <span class="input-group-addon">{{p.unidad_salida}}</span>
+                                    <input type="text" class="form-control cantidad" ng-model="p.cantidad" ng-change="calculate(p)"/>
+                                    <span class="input-group-addon">{{p.unidad_entrada}}</span>
                                 </div>
+                                <small class="text-primary text-small">{{ p.conversion * (p.cantidad || 0) }} {{p.unidad_salida}}</small>
                             </div>
                             <div class="col-xs-2">
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
-                                    <input type="text" class="form-control total" name="items[{{p.id_registro}}][total]" value="" ng-model="p.total" />
+                                    <input type="text" class="form-control total" ng-model="p.total" readonly tabindex="-1" />
                                 </div>
                             </div>
-                            <div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter();"><i class="fa fa-trash"></i> </a></div>
+                            <div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" ng-click="deleter();" tabindex="-1"><i class="fa fa-trash"></i> </a></div>
                         </div>
                     </div>
                     <div class="row mt-10">
@@ -155,7 +154,7 @@ unset($_SESSION['db_message']);
                                 <label>Saldo A Cuenta</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
-                                    <input type="text" class="form-control pagado" name="saldo_pagado" ng-model="item.saldo_pagado" value="" required>
+                                    <input type="text" class="form-control pagado" name="saldo_pagado" ng-model="item.saldo_pagado" value="" required  ng-change="calculate(p)">
                                 </div>
                                 <label>Saldo Pendiente</label>
                                 <div class="input-group">

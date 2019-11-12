@@ -8,10 +8,11 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
                     $scope.item.serial_id = ('00000' + $scope.item.id).slice(-5)
                     $scope.item.id_proveedor = '' + $scope.item.id_proveedor
     
-                    console.log($scope.item)
+                    
                     let select = $('select[name="id_proveedor"]')
                     select.val($scope.item.id_proveedor);
-                    setTimeout(() => {                    select.trigger('change');
+                    setTimeout(() => {
+                        select.trigger('change');
                     }, 1)
                 });
         } else {
@@ -19,6 +20,9 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
                 serial_id: 0,
                 id_proveedor: 0,
                 items: [],
+                saldo_total: 0,
+                saldo_pagado: 0,
+                saldo_pendiente: 0
             }
         }
     }
@@ -36,7 +40,6 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
     })
 
     $scope.addProduct = () => {
-        console.log()
         var select = $('#select-productos')
         if (select.val() > 0) {
             // Si hay una opcion seleccionada, vamos por el registro
@@ -46,83 +49,37 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
                 method: 'GET',
                 url: url,
                 success: function (response) {
-                    categoria: "Carnes"
-                    conversion: "8.00"
-                    id: 1
-                    nombre: "Carne para hamburguesa"
-                    unidad_entrada: "Pq"
-                    unidad_salida: "pz"
                     $scope.item.items.push({
                         id_registro: 0,
-                        id_item: response.id,
-                        nombre: response.nombre,
+                        id_item: response.id_item,
+                        item: response.item,
                         id_categoria: response.id_categoria,
                         categoria: response.categoria,
-                        id_unidad_original: 0,
                         id_unidad_entrada: response.id_unidad_entrada,
                         unidad_entrada: response.unidad_entrada,
                         id_unidad_salida: response.id_unidad_salida,
                         unidad_salida: response.unidad_salida,
-                        conversion: response.conversion,
+                        conversion: parseFloat(response.conversion),
+                        precio: 0,
+                        cantidad: 1
                     })
-
-                    // var list = $('#lista-compras'), index = Math.random() * -1
-                    // if (response) {
-                    //     var div = $('<div class="row row-ingrediente m-0">' +
-                    //         '<input type="hidden" name="items[' + index + '][id_registro]" value="0">' +
-                    //         '<input type="hidden" name="items[' + index + '][id_item]" value="' + response.id + '">' +
-                    //         '<input type="hidden" name="items[' + index + '][id_unidad_original]" value="' + response.id_unidad + '">' +
-                    //         '<input type="hidden" name="items[' + index + '][id_unidad]" value="' + response.id_unidad + '">' +
-                    //         '<div class="col-xs-5">' + response.nombre + '<br><small class="text-muted">' + response.categoria + '</small></div>' +
-                    //         '<div class="col-xs-2"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control precio" name="items[' + index + '][precio]"/><span class="input-group-addon">x 1' + response.unidad_entrada + '</span></div></div>' +
-                    //         '<div class="col-xs-2"><div class="input-group"><input type="text" class="form-control cantidad" name="items[' + index + '][cantidad]"/><span class="input-group-addon">' + response.unidad_entrada + '</span></div>' +
-                    //         '<span class="text-small">[ ' + (1 * parseFloat(response.conversion)) + ' ' + response.unidad_salida + ']</span>'+
-                    //         '</div>' +
-                    //         '<div class="col-xs-2"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control total" name="items[' + index + '][total]"/></div></div>' +
-                    //         '<div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter();"><i class="fa fa-trash"></i> </a></div>' +
-                    //         '</div>');
-                    //     list.append(div)
-                    // } else {
-
-                    // }
+                    $scope.$apply()
                 }
             })
         }
     }
-
-})
-/*
-$('.btn-add').on('click', function () {
-    var select = $(this).closest('.input-group').find('select')
-    if (select.val() > 0) {
-        // Si hay una opcion seleccionada, vamos por el registro
-        var url = '/ajax/' + select.attr('data-url') + select.val()
-        select.val(null).trigger('change')
-        $.ajax({
-            method: 'GET',
-            url: url,
-            success: function (response) {
-                var list = $('#lista-compras'), index = Math.random() * -1
-                if (response) {
-                    var div = $('<div class="row row-ingrediente m-0">' +
-                        '<input type="hidden" name="items[' + index + '][id_registro]" value="0">' +
-                        '<input type="hidden" name="items[' + index + '][id_item]" value="' + response.id + '">' +
-                        '<input type="hidden" name="items[' + index + '][id_unidad_original]" value="' + response.id_unidad + '">' +
-                        '<input type="hidden" name="items[' + index + '][id_unidad]" value="' + response.id_unidad + '">' +
-                        '<div class="col-xs-5">' + response.nombre + '<br><small class="text-muted">' + response.categoria + '</small></div>' +
-                        '<div class="col-xs-2"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control precio" name="items[' + index + '][precio]"/></div></div>' +
-                        '<div class="col-xs-2"><div class="input-group"><input type="text" class="form-control cantidad" name="items[' + index + '][cantidad]"/><span class="input-group-addon">' + response.unidad + '</span></div></div>' +
-                        '<div class="col-xs-2"><div class="input-group"><span class="input-group-addon">$</span><input type="text" class="form-control total" name="items[' + index + '][total]"/></div></div>' +
-                        '<div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter();"><i class="fa fa-trash"></i> </a></div>' +
-                        '</div>');
-                    list.append(div)
-                } else {
-
-                }
-            }
-        })
+    
+    $scope.calculate = (p) => {
+        if (p != undefined) {
+            p.total = (p.precio || 0) * (p.cantidad || 1)
+        }
+        let total = $scope.item.items.reduce((a, b) => a == undefined ? b.total : b == undefined ? a : a + b.total, 0)
+        $scope.item.saldo_total = total
+        $scope.item.saldo_pendiente = total - $scope.item.saldo_pagado
     }
 })
+/*
+
 $('#check-orden-cerrada').on('ifChanged', function () {
     if ($(this).is(':checked')) {
         orderClose()
@@ -133,46 +90,8 @@ $('#check-orden-cerrada').on('ifChanged', function () {
     }
 })
 
-$(document).on('blur', '.precio, .cantidad', function () {
-    var fila = $(this).closest('.row-ingrediente');
-    sumaFila(fila)
-    sumaTotal()
-})
-$(document).on('blur', '.pagado', function () {
-    saldos()
-})
-
-function sumaFila(fila) {
-    var precio = fila.find('.precio').val() || 0,
-        cantidad = fila.find('.cantidad').val() || 0,
-        total = 0
-    total = precio * cantidad
-    fila.find('.total').val(total)
-}
-function sumaTotal() {
-    var total = 0;
-    $('.total').each(function (k, i) {
-        total += parseFloat($(i).val())
-    })
-    $('.saldo-total').val(total)
-}
-function saldos() {
-    var total = $('.saldo-total').val(),
-        pagado = $('.pagado').val() || 0
-    if (total == 0 && pagado > 0) {
-        alert('No se puede tener saldo pagado si el total a pagar es $ 0');
-        return
-    }
-    $('.pendiente').val(total - pagado)
-}
 function orderClose() {
     $('.btn-add').attr('disabled', 'disabled')
     $('.select-item').attr('disabled', 'disabled').select2({ 'disabled': true }).val(null).trigger('change');
     $('.precio, .cantidad, .total, .pagado').attr('readonly', 'readonly')
 }
-$(document).ready(function () {
-    // <? php
-    // if ($item['orden_cerrada'] == 1) echo ' orderClose(); ';
-    // ?>
-})
-*/

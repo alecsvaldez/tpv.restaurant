@@ -18,6 +18,8 @@ $data = array(
     'Comentarios' => $_POST['comentarios'],
 );
 
+echo '<pre>';print_r($data);echo'</pre>';exit;
+
 if ($id > 0){
     $data['IdUsuarioModifica'] = $_SESSION['id'];
     $data['FechaModifica'] = date('Y-m-d H:i:s');
@@ -57,7 +59,7 @@ if ($id > 0 && isset($_POST['items']) &&  count($_POST['items']) > 0 ){
 
 if ($id !== false){
     sessionMessage('success', 'Los datos se han guardado.');
-    header('Location: ' . $site_url . '/compras');
+    header('Location: ' . $site_url . 'compras');
 } else {
     $error = $db->executeError();
     sessionMessage('error', $error['db_message'], 'Ocurrió un error al registrar la información');

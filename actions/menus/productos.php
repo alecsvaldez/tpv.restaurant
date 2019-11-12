@@ -25,7 +25,7 @@ if ($id_menu > 0){
         }
     }
     sessionMessage('success', 'Los productos han sido agreados al menú.');
-    header('Location: ' . $site_url . '/administracion/menus');
+    header('Location: ' . $site_url . 'administracion/menus');
 } else {
     sessionMessage('error', 'Información Incompleta', 'No se ha especificado un id de menú válido.');
     header('Location: ' . $_SERVER['HTTP_REFERER']);
