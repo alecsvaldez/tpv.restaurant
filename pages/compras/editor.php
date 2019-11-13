@@ -19,10 +19,11 @@ unset($_SESSION['db_message']);
             <!-- general form elements -->
             <div class="box box-primary"> 
                 <!-- form start -->
-                <form action="./" method="post" accept-charset="utf-8">
+                <form action="./" method="post" accept-charset="utf-8" id="form" autocomplete="off">
                     <input type="hidden" name="seccion" value="<?php echo $seccion?>">
                     <input type="hidden" name="action" value="editor">
                     <input type="hidden" name="id" value="<?php echo $id ?>">
+                    <input type="hidden" name="items">
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-2">
@@ -69,7 +70,7 @@ unset($_SESSION['db_message']);
                         </div> 
                     </div>
                     <div class="row">
-                    <pre>{{item | json}}</pre>
+                    
                         <!-- <div class="col-md-3">
                             <div class="form-group">
                                 <label>Tipo de Compra  <span class="required_star">*</span></label>
@@ -102,7 +103,6 @@ unset($_SESSION['db_message']);
                         <div class="col-xs-2">Precio Total</div>
                         <div class="col-xs-1"></div>
                     </div>
-                    <input type="text" ng-model="item.items" name="items">
                     <div class="row m-0" id="lista-compras">
                         <div class="row row-ingrediente m-0" ng-repeat="p in item.items">
                             <div class="col-xs-5">{{p.item}}<br><small class="text-muted">{{p.categoria}}</small></div>
@@ -129,12 +129,13 @@ unset($_SESSION['db_message']);
                             <div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" ng-click="deleter();" tabindex="-1"><i class="fa fa-trash"></i> </a></div>
                         </div>
                     </div>
+
                     <div class="row mt-10">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Cerrar Orden</label>
                                 <br>
-                                <label><input type="checkbox" class="minimal" id="check-orden-cerrada" name="orden_cerrada" value="1" ng-model="item.orden_cerrada" ng-checked="item.orden_cerrada == 1">  Orden Cerrada</label>
+                                <label><input type="checkbox" icheck class="minimal" ng-model="item.orden_cerrada" id="check-orden-cerrada" name="orden_cerrada" value="1">  Orden Cerrada</label>
                                 <small class="help-block">Al cerrar una orden ya no se pueden agregar elementos ni modificar precios o cantidades.</small>
                             </div>
                         </div>

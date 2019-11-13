@@ -17,8 +17,9 @@ $data = array(
     'SaldoPendiente' => $_POST['saldo_pendiente'],
     'Comentarios' => $_POST['comentarios'],
 );
-
-echo '<pre>';print_r($data);echo'</pre>';exit;
+$items = json_decode($_POST['items'], true);
+// echo '<pre>';print_r($data);echo'</pre>';
+// echo '<pre>';print_r($items);echo'</pre>';exit;
 
 if ($id > 0){
     $data['IdUsuarioModifica'] = $_SESSION['id'];
@@ -33,14 +34,18 @@ if ($id > 0){
 if ($id > 0 && isset($_POST['items']) &&  count($_POST['items']) > 0 ){
     // Ahora registramos los ingredientes
     $table = 'tb_compras_detalle';
-    foreach($_POST['items'] as $index => $val){
+    foreach($items as $index => $val){
         $data = array(
             'IdCompra' => $id,
             'IdItem' => $val['id_item'],
-            'IdUnidad' => $val['id_unidad'],
-            'IdUnidadOriginal' => $val['id_unidad_original'], // Se guarda esta unidad para después permitir cambio de unidades en compra con equivalencias
+            'Item' => $val['item'],
+            'IdUnidad' => $val['id_unidad_entrada'],
+            'Unidad' => $val['unidad_entrada'],
+            'IdUnidadSalida' => $val['id_unidad_salida'], // Se guarda esta unidad para después permitir cambio de unidades en compra con equivalencias
+            'UnidadSalida' => $val['unidad_salida'], // Se guarda esta unidad para después permitir cambio de unidades en compra con equivalencias
             'Precio' => $val['precio'],
             'Cantidad' => $val['cantidad'],
+            'FactorConversion' => $val['conversion'],
             'Total' => $val['total'],
             'id' => $val['id_registro']
         );

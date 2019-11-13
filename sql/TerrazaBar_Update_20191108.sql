@@ -23,6 +23,7 @@ ALTER TABLE tb_compras_detalle
   ADD COLUMN Unidad VARCHAR(255) DEFAULT NULL AFTER IdUnidad,
   ADD COLUMN IdUnidadSalida INT(11) DEFAULT NULL AFTER Cantidad,
   ADD COLUMN UnidadSalida VARCHAR(255) DEFAULT NULL AFTER IdUnidadSalida;
+  ADD COLUMN FactorConversion decimal(10,2) DEFAULT NULL AFTER  Cantidad
 
 ALTER TABLE tb_compras_detalle 
   DROP COLUMN IdUnidadOriginal;

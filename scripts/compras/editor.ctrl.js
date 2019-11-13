@@ -7,8 +7,10 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
                     $scope.item = response.data;
                     $scope.item.serial_id = ('00000' + $scope.item.id).slice(-5)
                     $scope.item.id_proveedor = '' + $scope.item.id_proveedor
-    
-                    
+                    if ($scope.item.orden_cerrada) {
+                        $('#check-orden-cerrada').iCheck('check');
+                    }
+
                     let select = $('select[name="id_proveedor"]')
                     select.val($scope.item.id_proveedor);
                     setTimeout(() => {
@@ -26,6 +28,9 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
             }
         }
     }
+    $('input').on('ifChecked', function (event) {
+        $scope.item.orden_cerrada = true
+    });
     $scope.getItem()
 
     $scope.ingredientes = []
@@ -77,9 +82,14 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
         $scope.item.saldo_total = total
         $scope.item.saldo_pendiente = total - $scope.item.saldo_pagado
     }
+
+    $('#form').submit(function () {
+        $('input[name="items"]').val( JSON.stringify( angular.toJson($scope.item.items) ))
+        return true;
+    });
+    
 })
 /*
-
 $('#check-orden-cerrada').on('ifChanged', function () {
     if ($(this).is(':checked')) {
         orderClose()
@@ -95,3 +105,4 @@ function orderClose() {
     $('.select-item').attr('disabled', 'disabled').select2({ 'disabled': true }).val(null).trigger('change');
     $('.precio, .cantidad, .total, .pagado').attr('readonly', 'readonly')
 }
+*/
