@@ -17,9 +17,9 @@ $data = array(
     'SaldoPendiente' => $_POST['saldo_pendiente'],
     'Comentarios' => $_POST['comentarios'],
 );
-$items = json_decode($_POST['items'], true);
-// echo '<pre>';print_r($data);echo'</pre>';
-// echo '<pre>';print_r($items);echo'</pre>';exit;
+$items = json_decode(json_decode($_POST['items']), true);
+ echo '<pre>';print_r($data);echo'</pre>';
+ echo '<pre>';print_r($items);echo'</pre>';
 
 if ($id > 0){
     $data['IdUsuarioModifica'] = $_SESSION['id'];
@@ -58,6 +58,34 @@ if ($id > 0 && isset($_POST['items']) &&  count($_POST['items']) > 0 ){
             // $data['IdUsuarioCrea'] = $_SESSION['id'];
             // $data['FechaCrea'] = date('Y-m-d H:i:s');
             $data['id'] = $db->insert($table, $data);
+        }
+
+        // Ahora vamos a guardar a inventario
+        $inventario = $db->find('tb_inventario', array('id'=>'id', 'existencia' => 'Existencia'), array('IdTipoItem' => 1, 'idItem' => $val['id_item'] ));
+        $movimiento = $val['cantidad'] * $val['conversion'];
+        if ($inventario && $inventario['id'] > 0){
+            $existencia = $inventario['existencia'] + ($val['cantidad'] * $val['conversion']);
+            $id_inventario = $db->updateById('tb_inventario', array(
+                'TipoMovimiento' => 1, // 1 = entrada, 0 = salida, 2/-1 = merma
+                'Movimiento' => $movimiento,
+                'Existencia' => $existencia,
+                'UltimoIngreso' => date('Y-m-d H:i:s'),
+                'IdUltimoIngreso' => $id,
+                'Comentarios' => 'Compra ' . $id . '-' . $_POST['folio']
+            ), 'id', $inventario['id'] );
+        } else {
+            $id_inventario = $db->insert('tb_inventario', array(
+                'IdTipoItem' => 1,
+                'IdItem' => $val['id_item'],
+                'IdUnidad' => $val['id_unidad_salida'],
+                'Min' => 0,
+                'TipoMovimiento' => 1,
+                'Movimiento' => $movimiento,
+                'Existencia' => $movimiento,
+                'UltimoIngreso' => date('Y-m-d H:i:s'),
+                'IdUltimoIngreso' => $id,
+                'Comentarios' => 'Compra ' . $id . '-' . $_POST['folio']
+            ));
         }
     }
 }
