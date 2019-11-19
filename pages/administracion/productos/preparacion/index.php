@@ -126,10 +126,10 @@ jQuery(document).ready(function(){
                     var list = $('#lista-ingredientes')
                     if (response){
                         var div = $('<div class="row row-ingrediente m-0">' + 
-                            '<input type="hidden" name="ingrediente[' + response.id + '][id_registro]" value="0">' +
-                            '<div class="col-xs-5">' + response.nombre + '<br><small class="text-muted">' + response.categoria + '</small></div>' +
-                            '<div class="col-xs-3"><input type="text" class="form-control" name="ingrediente[' + response.id + '][cantidad]"/></div>' +
-                            '<div class="col-xs-3"><input type="hidden" name="ingrediente[' + response.id + '][unidad]" value="' + response.id_unidad + '">' + response.unidad + '</div>' +
+                            '<input type="hidden" name="ingrediente[' + response.id_item + '][id_registro]" value="0">' +
+                            '<div class="col-xs-5">' + response.item + '<br><small class="text-muted">' + response.categoria + '</small></div>' +
+                            '<div class="col-xs-3"><input type="text" class="form-control" name="ingrediente[' + response.id_item + '][cantidad]"/></div>' +
+                            '<div class="col-xs-3"><input type="hidden" name="ingrediente[' + response.id_item + '][unidad]" value="' + response.id_unidad_salida + '">' + response.unidad_salida + '</div>' +
                             '<div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" onclick="deleter();"><i class="fa fa-trash"></i> </a></div>' +
                         '</div>');
                         list.append(div)

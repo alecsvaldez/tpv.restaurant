@@ -5,7 +5,29 @@ include_once 'config.php';
 $datatables = true;
 $datatables_config = array();
 
-$data = $db->select($table, $columns_list, $conditions_list, 9999 );
+$data = $db->get("SELECT 
+        IdTipoItem AS id_tipo_item
+        , IdItem AS id_item
+        , a.Ingrediente AS item
+        , a.Estatus AS estatus_item
+        -- , i.IdUnidad AS id_unidad
+        , Existencia AS existencia
+        , u.Unidad AS unidad
+        , u.Abreviacion AS unidad_ab
+        , Min AS min
+        , Max AS max
+        , TipoMovimiento AS tipo_movimiento
+        , Movimiento AS movimiento
+        , UltimoIngreso AS ultimo_ingreso
+        , IdUltimoIngreso AS id_ultimo_ingreso
+        , UltimaSalida AS ultima_salida
+        , IdUltimaSalida AS id_ultima_salida
+        , RegistroManual AS registro_manual
+        , Comentarios AS comentarios
+    FROM tb_inventario i
+        INNER JOIN tb_ingredientes AS a ON a.id = i.IdItem
+        INNER JOIN tb_unidades AS u ON u.id = i.IdUnidad
+    WHERE a.Estatus = 1 OR i.Existencia > 0");
 
 showSessionMessage();
 ?>
@@ -29,7 +51,6 @@ showSessionMessage();
         </div>
         <div class="hidden-md hidden-lg" style="height: 50px;"></div>
         <div class="col-md-offset-4 col-md-2">
-            <a href="<?php echo $current_url ?>editor"><button type="button" class="btn btn-block btn-primary pull-right">Agregar</button></a>
         </div>
     </div> 
 </section>
@@ -46,10 +67,11 @@ showSessionMessage();
                             <tr>
                                 <th style="width: 1%">SN</th>
                                 <th>Producto</th>
-                                <th>Descripción</th>
-                                <th>Categoría</th>
-                                <th>Tipo</th>
-                                <th>Agregado por</th>
+                                <th>Existencia</th>
+                                <th>Última Entrada</th>
+                                <th>Última Salida</th>
+                                <th>Mínimo</th>
+                                <th>Máximo</th>
                                 <th style="width: 7%;text-align: center">Acciones</th>
                             </tr>
                         </thead>
@@ -58,22 +80,33 @@ showSessionMessage();
                         foreach($data as $d){
                             ?>
                             <tr>
-                                <td><?php echo $d['id'] ?></td>
-                                <td><?php echo $d['nombre'] ?></td>
-                                <td><?php echo $d['descripcion'] ?></td>
-                                <td><?php echo idToString($d['id_categoria'], $categorias_indexed)?></td>
-                                <td><?php echo idToString($d['id_tipo_producto'], $tipos_producto_indexed)?></td>
-                                <td></td>
+                                <td><?php echo $d['id_item'] ?></td>
+                                <td><?php echo $d['item'] ?><br><small class="text-muted"><?php echo $d['id_tipo_item']?></small></td>
+                                <td><?php echo $d['existencia'] . ' ' . $d['unidad_ab'] ?></td>
+                                <td><a href="<?php echo $site_url?>compras/editor/<?php echo $d['id_ultimo_ingreso']?>"><?php echo dateToString($d['ultimo_ingreso'])?></a>
+                                <?php
+                                if ($d['tipo_movimiento'] == 1){
+                                    echo '<br><small class="text-success">+ ' . $d['movimiento'] . ' ' . $d['unidad_ab'] . '</small>';
+                                }
+                                ?>
+                                </td>
+                                <td><?php echo dateToString($d['ultima_salida'])?>
+                                <?php
+                                if ($d['tipo_movimiento'] == 0){
+                                    echo '<br><small class="text-danger">- ' . $d['movimiento'] . ' ' . $d['unidad_ab'] . '</small>';
+                                }
+                                ?>
+                                </td>
+                                <td><?php echo $d['min'] . ' ' . $d['unidad_ab'] ?></td>
+                                <td><?php echo $d['max'] . ' ' . $d['unidad_ab'] ?></td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                             <i class="fa fa-gear tiny-icon"></i> <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-right" role="menu"> 
-                                            <li><a href="<?php echo $current_url . 'preparacion/' . $d['id']?>" ><i class="fa fa-list tiny-icon"></i> Preparación</a></li> 
-                                            <li role="separator" class="divider"></li>
-                                            <li><a href="<?php echo $current_url . 'editor/' . $d['id']?>"><i class="fa fa-pencil tiny-icon"></i> Editar</a></li>
-                                            <li><a href="<?php echo $current_url . 'borrar/' . $d['id']?>" class="delete" ><i class="fa fa-trash tiny-icon"></i> Borrar</a></li> 
+                                            <li><a href="<?php echo $current_url . 'editor/' . $d['id_item']?>"><i class="fa fa-pencil tiny-icon"></i> Editar</a></li>
+                                            <li><a href="<?php echo $current_url . 'borrar/' . $d['id_item']?>" class="delete" ><i class="fa fa-trash tiny-icon"></i> Borrar</a></li> 
                                         </ul> 
                                     </div>
                                 </td>
@@ -86,10 +119,11 @@ showSessionMessage();
                             <tr>
                                 <th style="width: 1%">SN</th>
                                 <th>Producto</th>
-                                <th>Descripción</th>
-                                <th>Categoría</th>
-                                <th>Tipo</th>
-                                <th>Agregado por</th>
+                                <th>Existencia</th>
+                                <th>Última Entrada</th>
+                                <th>Última Salida</th>
+                                <th>Mínimo</th>
+                                <th>Máximo</th>
                                 <th style="width: 7%;text-align: center">Acciones</th>
                             </tr>
                         </tfoot>

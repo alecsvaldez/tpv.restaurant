@@ -137,13 +137,55 @@ switch($accion){
                         $producto['FechaCrea'] = date('Y-m-d H:i:s');
                         $db->insert('tb_comandas_productos', $producto);
                     }
+
+                    // Una vez colocada la comanda, vamos a registrar las salidas del inventario
+                    // Por cada producto hay que leer sus ingredientes y registrar las salidas correspondientes
+                    $ingredientes = $db->select('tb_preparaciones_ingredientes', array(
+                        'cantidad' => 'Cantidad', 
+                        'id_ingrediente' => 'IdIngrediente',
+                        'id_unidad' => 'IdUnidad'
+                    ), array(
+                        'Estatus' => 1,
+                        'IdProducto' => $p['id_producto']
+                    ));
+                    foreach($ingredientes as $i){
+                        // Ahora vamos a guardar a inventario
+                        $inventario = $db->find('tb_inventario', array('id'=>'id', 'existencia' => 'Existencia'), array('IdTipoItem' => 1, 'IdItem' => $i['id_ingrediente'] ));
+                        // echo '<pre>';print_r($inventario);echo'</pre>';
+                        $movimiento = $i['cantidad'];
+                
+                        if ($inventario && $inventario['id'] > 0){
+                            $existencia = $inventario['existencia'] - $i['cantidad'];
+                            $id_inventario = $db->updateById('tb_inventario', array(
+                                'TipoMovimiento' => 0, // 1 = entrada, 0 = salida, 2/-1 = merma
+                                'Movimiento' => $movimiento,
+                                'Existencia' => $existencia,
+                                'UltimaSalida' => date('Y-m-d H:i:s'),
+                                'IdUltimaSalida' => $id_comanda,
+                                'Comentarios' => 'Comanda ' . $id_comanda
+                            ), 'id', $inventario['id'] );
+                        } else {
+                            $id_inventario = $db->insert('tb_inventario', array(
+                                'IdTipoItem' => 1,
+                                'IdItem' => $val['id_item'],
+                                'IdUnidad' => $val['id_unidad_salida'],
+                                'Min' => 0,
+                                'TipoMovimiento' => 0,
+                                'Movimiento' => $movimiento,
+                                'Existencia' => ($movimiento * -1),
+                                'UltimaSalida' => date('Y-m-d H:i:s'),
+                                'IdUltimaSalida' => $id_comanda,
+                                'Comentarios' => 'Comanda ' . $id_comanda
+                            ));
+                        }
+                    }                    
                 }
                 $response = array ('id_registro' => $id_comanda, 'message' => 'Los datos se han guardado.');
                 // Ahora se imprime el ticket de la comanda en cocina
                 // update a la comanda para marcarla como cobrada/cerrada
                 $c = $data;
                 $c['nombre'] =  'C-' . $c['id_mesa'] . '-' . $id_comanda;
-                require ROOTPATH . 'lib/printer_cocina.php'; 
+                // require ABSPATH . 'lib\printer_cocina.php'; 
             } else {
                 $error = $db->executeError();
                 $response = array ('id_registro' => 0, 'message' => 'Error al guardar: ' . $error['db_message']);
@@ -157,7 +199,8 @@ switch($accion){
         $comandas_db = $db->get("SELECT 
             id AS id_registro
             , CONCAT(Comanda, '-', id) AS nombre
-            , CONCAT('C-', id) AS comanda
+            , CONCAT('M-', IdMesa) AS comanda
+            , IdMesa AS id_mesa
             , IdAtiende AS id_usuario
             , DescuentoStr AS descuento_str
             , Descuento AS descuento
@@ -273,7 +316,7 @@ switch($accion){
             $response = array ('id_registro' => $id_comanda, 'message' => 'La comanda ha sido cerrada');
             // generamos la cuenta
             $c = $data;
-            require ROOTPATH . 'lib/printer.php'; 
+            require ABSPATH . 'lib/printer.php'; 
         } else {
             $error = $db->executeError();
             $response = array ('id_registro' => 0, 'message' => 'Error al cerrar: ' . $error['db_message']);

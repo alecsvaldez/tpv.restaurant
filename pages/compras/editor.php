@@ -78,7 +78,7 @@ unset($_SESSION['db_message']);
                             </div>
                         </div> -->
                         <div class="col-md-4">
-                            <div class="form-group">
+                            <div class="form-group" id="select-productos-container">
                                 <label>Productos</label>
                                 <div class="input-group">
                                     <select tabindex="5" id="select-productos" class="form-control select2 select-item" data-url="ingredientes/detalle/" style="width:100%">
@@ -126,7 +126,7 @@ unset($_SESSION['db_message']);
                                     <input type="text" class="form-control total" ng-model="p.total" readonly tabindex="-1" />
                                 </div>
                             </div>
-                            <div class="col-xs-1"><a class="btn btn-danger btn-xs" style="margin-left: 5px; margin-top: 10px;" ng-click="deleter();" tabindex="-1"><i class="fa fa-trash"></i> </a></div>
+                            <div class="col-xs-1"><a class="btn btn-danger btn-xs btn-delete-item" style="margin-left: 5px; margin-top: 10px;" ng-click="deleter();" tabindex="-1"><i class="fa fa-trash"></i> </a></div>
                         </div>
                     </div>
 
@@ -136,7 +136,7 @@ unset($_SESSION['db_message']);
                                 <label>Cerrar Orden</label>
                                 <br>
                                 <label><input type="checkbox" icheck class="minimal" ng-model="item.orden_cerrada" id="check-orden-cerrada" name="orden_cerrada" value="1">  Orden Cerrada</label>
-                                <small class="help-block">Al cerrar una orden ya no se pueden agregar elementos ni modificar precios o cantidades.</small>
+                                <small class="help-block">Al cerrar una orden ya no se pueden agregar elementos ni modificar precios o cantidades. Es necesario activar esta casilla para registrar ingresos a inventario</small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -169,7 +169,7 @@ unset($_SESSION['db_message']);
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button type="submit" name="submit" value="submit" class="btn btn-primary">Guardar</button>
+                    <button type="submit" id="btn-guardar" name="submit" value="submit" class="btn btn-primary" disabled>Guardar</button>
                     <a href="<?php echo $site_url?><?php echo $seccion?>"><button type="button" class="btn btn-primary">Regresar</button></a>
                 </div>
                 </form>            

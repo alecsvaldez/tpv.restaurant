@@ -7,7 +7,7 @@ setlocale(LC_ALL, $region );
 // setlocale(LC_MONETARY, 'en_US');
 // setlocale(LC_NUMERIC, $region);
 
-/** Define ABSPATH as this file's directory */
+/** Define ABSPATH as root directory */
 if ( ! defined( 'ABSPATH' ) ) {
     // root folder, in FILE format
 	define( 'ABSPATH', dirname( dirname(__FILE__) ) . '/' );

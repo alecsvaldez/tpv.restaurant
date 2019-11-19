@@ -43,8 +43,9 @@ function fill($str, $len = 48,  $fill = ' ', $right = true){
 if (count($productos_cocina) > 0){
 
   try {
+      echo ABSPATH . "assets/images/logo_ticket.jpg";
       // ... Print 
-      $logo = EscposImage::load( ROOTPATH . "assets/images/logo_ticket.jpg");
+      $logo = EscposImage::load( ABSPATH . "assets/images/logo_ticket.jpg");
       $printer->setJustification(Printer::JUSTIFY_CENTER);
       $printer->bitImage($logo);
       $printer->text("\n\n");
@@ -110,7 +111,7 @@ if (count($productos_barra) > 0){
   $printer_c = new Printer($connector_c);
   try {
       // ... Print 
-      $logo = EscposImage::load( ROOTPATH . "assets/images/logo_ticket.jpg");
+      $logo = EscposImage::load( ABSPATH . "assets/images/logo_ticket.jpg");
       $printer_c->setJustification(Printer::JUSTIFY_CENTER);
       $printer_c->bitImage($logo);
       $printer_c->text("\n\n");

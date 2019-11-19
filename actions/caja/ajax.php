@@ -142,7 +142,7 @@ switch($accion){
             $c = $data;
             $abrir_caja = 1;
             // update a la comanda para marcarla como cobrada/cerrada
-            require ROOTPATH . 'lib/printer.php'; 
+            require ABSPATH . 'lib/printer.php'; 
         } else {
             $error = $db->executeError();
             $response = array ('id_registro' => 0, 'message' => 'Error al cerrar: ' . $error['db_message']);

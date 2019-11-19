@@ -29,7 +29,7 @@ function fill($str, $len = 48,  $fill = ' ', $right = true){
 }
 try {
     // ... Print 
-    $logo = EscposImage::load( ROOTPATH . "assets/images/logo_ticket.jpg");
+    $logo = EscposImage::load( ABSPATH . "assets/images/logo_ticket.jpg");
     $printer->setJustification(Printer::JUSTIFY_CENTER);
     $printer->bitImage($logo);
     $printer->text("\n\n");

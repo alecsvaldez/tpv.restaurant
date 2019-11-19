@@ -6,8 +6,8 @@ $table = 'tb_productos';
 $id = (isset($_POST['id']) && $_POST['id'] > 0) ? $_POST['id'] : 0;
 
 //upload control
-$upload_dir = ROOTPATH . '/uploads/productos/';
-$upload_temp = ROOTPATH . '/uploads/productos/_temp/';
+$upload_dir = ABSPATH . '/uploads/productos/';
+$upload_temp = ABSPATH . '/uploads/productos/_temp/';
 if (!file_exists($upload_temp)){
     mkdir($upload_dir,077,true);
     mkdir($upload_temp,077,true);

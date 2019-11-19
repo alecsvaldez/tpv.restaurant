@@ -9,8 +9,17 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
                     $scope.item.id_proveedor = '' + $scope.item.id_proveedor
                     if ($scope.item.orden_cerrada) {
                         $('#check-orden-cerrada').iCheck('check');
+                        $('#select-productos-container').hide()
+                        $('#btn-guardar').hide()
+                        setTimeout(() => {
+                            $('.btn-delete-item').hide()
+                            $('#form input, #form textarea, #form select').each((i,el) => {
+                                $(el).attr('readonly','readonly').attr('disabled','disabled')
+                            })
+                        }, 100)
+                    } else { 
+                        $('#btn-guardar').removeAttr('disabled')
                     }
-
                     let select = $('select[name="id_proveedor"]')
                     select.val($scope.item.id_proveedor);
                     setTimeout(() => {
@@ -26,6 +35,7 @@ var app = angular.module('app', []).controller('compras_editor', function ($scop
                 saldo_pagado: 0,
                 saldo_pendiente: 0
             }
+            $('#btn-guardar').removeAttr('disabled')
         }
     }
     $('input').on('ifChecked', function (event) {

@@ -121,16 +121,24 @@ class db {
         $sql = trim($sql,',');
         $sql .= '
         FROM ' . $table;
-        if (!empty($conditions)){
-            $sql .= '
-        WHERE ' . implode(' AND ',$conditions);
-
+        if (!empty($conditions) ){
+            if ( isset($conditions[0]) && preg_match("/(\w+)\s+?[<>=LIKE]+\s+?('?\S+'?)/",$conditions[0]) !== false ){
+                $sql .= '
+            WHERE ' . implode(' AND ',$conditions);
+            } else {
+                $new_conds = array();
+                foreach($conditions as $col => $val ){
+                    $new_conds[] = $col . ' = ' . $val;
+                }
+                $sql .= '
+            WHERE ' . implode(' AND ',$new_conds);
+            }
         }
         if (is_numeric($limit) && $limit > 0){
             $sql .= ' 
         LIMIT ' . $limit;
         }
-        //print_array($sql);
+        // print_array($sql);
         self::$sql = $sql;
         if (self::$show_sql){
             self::showSql($data);

@@ -33,9 +33,11 @@ app.directive('ngEnter', function () {
 
                     }).on('ifChanged', function (event) {
                         if ($(element).attr('type') === 'checkbox' && $attrs['ngModel']) {
-                            $scope.$apply(function () {
-                                return ngModel.$setViewValue(event.target.checked);
-                            });
+                            $timeout(() => {
+                                $scope.$apply(function () {
+                                    return ngModel.$setViewValue(event.target.checked);
+                                });
+                            })
                         }
                         if ($(element).attr('type') === 'radio' && $attrs['ngModel']) {
                             return $scope.$apply(function () {
