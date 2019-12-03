@@ -81,7 +81,7 @@ showSessionMessage();
                             ?>
                             <tr>
                                 <td><?php echo $d['id_item'] ?></td>
-                                <td><?php echo $d['item'] ?><br><small class="text-muted"><?php echo $d['id_tipo_item']?></small></td>
+                                <td><a href="/inventario/detalle/<?php echo $d['id_item']?>"><?php echo $d['item'] ?></a><br><small class="text-muted"><?php echo $d['id_tipo_item']?></small></td>
                                 <td><?php echo $d['existencia'] . ' ' . $d['unidad_ab'] ?></td>
                                 <td><a href="<?php echo $site_url?>compras/editor/<?php echo $d['id_ultimo_ingreso']?>"><?php echo dateToString($d['ultimo_ingreso'])?></a>
                                 <?php

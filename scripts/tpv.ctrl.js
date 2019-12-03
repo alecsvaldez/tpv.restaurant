@@ -393,8 +393,8 @@ var app = angular.module('app', []).controller('tpv', function ($scope, $http) {
                     var existe = $scope.comandas.find(c => c.id_registro == response.id_registro)
                     if (!existe) {
                         $scope.comanda.id_registro = parseInt(response.id_registro)
-                        $scope.comanda.nombre = 'C-' + response.id_registro
-                        $scope.comanda.comanda = 'C-' + response.id_registro
+                        $scope.comanda.nombre = 'M-' + $scope.comanda.id_mesa
+                        $scope.comanda.comanda = 'M-' + $scope.comanda.id_mesa
                         $scope.comandas.unshift($scope.comanda)
                     }
                 }

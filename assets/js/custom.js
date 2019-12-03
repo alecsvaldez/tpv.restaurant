@@ -1,4 +1,10 @@
-jQuery(document).ready( function() { 
+var dt_options = {
+    'autoWidth': false,
+    'ordering': true,
+    'iDisplayLength': 15
+}
+
+jQuery(document).ready(function () { 
     $('.select-dependant').on('change', function(){
         var child_selector = $(this).attr('data-child')
         var url = '/ajax/' + $(this).attr('data-url') + $(this).val()

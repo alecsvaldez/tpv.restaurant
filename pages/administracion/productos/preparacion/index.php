@@ -76,7 +76,7 @@ unset($_SESSION['db_message']);
                                 foreach($item['ingredientes'] as $i){
                                     ?>
                                     <div class="row row-ingrediente m-0">
-                                        <input type="hidden" class="input-id-registro" name="ingrediente[<?php echo $i['id']?>][id_registro]" value="<?php echo $i['id']?>">
+                                        <input type="hidden" class="input-id-registro" name="ingrediente[<?php echo $i['id']?>][id_registro]" value="<?php echo $i['id_ingrediente']?>">
                                         <div class="col-xs-5">
                                             <?php echo $ingredientes_indexed[$i['id_ingrediente']]?><br>
                                             <small class="text-muted"></small>

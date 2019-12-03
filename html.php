@@ -281,11 +281,8 @@ namespace TPV;
         <link href="<?php echo $site_js ?>datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
         <script>
             $(function() {
-                $('#datatable').DataTable({
-                    'autoWidth': false,
-                    'ordering': true,
-                    'iDisplayLength': 15
-                })
+                console.log(dt_options)
+                $('#datatable').DataTable(dt_options)
             })
         </script>
     <?php
